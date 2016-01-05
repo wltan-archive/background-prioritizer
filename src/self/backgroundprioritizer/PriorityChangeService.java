@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class PriorityChangeService extends Service {
 
@@ -26,12 +25,6 @@ public class PriorityChangeService extends Service {
 	private volatile int prev = -1; // PID of previously buffed process
 	
 	static volatile PriorityChangeService instance = null;
-	
-	/** temp method, shows a short toast*/
-	private void showToast(String msg){
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-	}
-	
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId){
@@ -49,18 +42,18 @@ public class PriorityChangeService extends Service {
 							data[i] = new ProcessUsageData(out.get(i+7));
 							if(data[i].pid == toDelete && data[i].name.equals(foregroundActivityPackageName)){
 								// no change since last execution
-								showToast("priority still with " + data[i].name);
+								Log.i("priority change", "priority still with " + data[i].name);
 								break;
 							}
 							if(data[i].pid == toDelete){
 								// change niceness back to normal
 								executeCommand("renice +" + NICE_SHIFT + " " + data[i].pid);
-								showToast("priority taken from " + data[i].name);
+								Log.i("priority change", "priority taken from " + data[i].name);
 							}
 							if(data[i].name.equals(foregroundActivityPackageName)){
 								// reduce niceness to give more priority
 								executeCommand("renice -" + NICE_SHIFT + " " + data[i].pid);
-								showToast("priority given to " + data[i].name);
+								Log.i("priority change", "priority given to " + data[i].name);
 								prev = data[i].pid;
 							}
 						}
