@@ -34,6 +34,7 @@ public class PriorityChangeService extends Service {
 		    public void run() {
 		    	if(!kill){
 					ArrayList<String> out = executeCommand("top -n 1");
+					// Data about individual processes only starts after line 7
 					if(out.size() > 7){
 						String foregroundActivityPackageName = getForegroundActivity();
 						ProcessUsageData[] data = new ProcessUsageData[out.size()-7];
@@ -58,7 +59,7 @@ public class PriorityChangeService extends Service {
 							}
 						}
 					}else{
-						Log.e("qwerty", "out is " + out.size() + " lines long");
+						Log.e("prioritizer service", "out is " + out.size() + " lines long");
 					}
 					
 		    		handler.postDelayed(this, POLL_TIME);
@@ -69,6 +70,10 @@ public class PriorityChangeService extends Service {
 		return START_STICKY;
 	}
 
+	/**
+	 * Obtains the currently running app.
+	 * @return The package name of the current app.
+	 */
     private String getForegroundActivity(){
     	ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         if(Build.VERSION.SDK_INT >= 21){
@@ -83,6 +88,9 @@ public class PriorityChangeService extends Service {
         }
     }
     
+    /**
+     * Used as a data type to organize the output from the {@code top} command.
+     */
     private static class ProcessUsageData{
     	private int pid;	// Process ID (PID)
     	private int prio;	// Priority
@@ -95,6 +103,10 @@ public class PriorityChangeService extends Service {
     	private String uid;	// User who owns it
     	private String name;// Package Name
     	
+    	/**
+    	 * Constructs an object from the command output.
+    	 * @param line The line as it is produced from the command line.
+    	 */
     	private ProcessUsageData(String line){
     		String[] tokens = line.trim().split("\\s+");
     		pid = Integer.parseInt(tokens[0]);
@@ -118,6 +130,12 @@ public class PriorityChangeService extends Service {
     	
     }
     
+    /**
+     * Creates a new Android terminal process with superuser permissions,
+     * and then executes a command on it.
+     * @param cmd The command to execute.
+     * @return The output by the terminal after executing the command, line by line, in chronological order.
+     */
     private static ArrayList<String> executeCommand(String cmd){
     	try{
     		Process p = Runtime.getRuntime().exec("su");
@@ -136,10 +154,9 @@ public class PriorityChangeService extends Service {
     		pstdout.close();
     		return out;
     	}catch(IOException e){
-    		Log.e("qwerty", "IO error " + e.getMessage());
+    		Log.e("prioritizer service", "IO error: " + e.getMessage());
 		}catch(InterruptedException e) {
-			Log.e("qwerty", "Interrupt error " + e.getMessage());
-			
+			Log.e("prioritizer service", "Interrupt error: " + e.getMessage());
 		}
     	return new ArrayList<String>();
     }
