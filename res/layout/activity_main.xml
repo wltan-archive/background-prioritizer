@@ -34,4 +34,27 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/onoff" />
 
+    <EditText
+        android:id="@+id/polltime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/priopick"
+        android:layout_alignRight="@+id/priopick"
+        android:layout_below="@+id/priopick"
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/polltime"
+        android:layout_alignBottom="@+id/polltime"
+        android:layout_toLeftOf="@+id/polltime"
+        android:text="Prioritization Time Interval: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

@@ -18,12 +18,8 @@ import android.util.Log;
 
 public class PriorityChangeService extends Service {
 
-	private static final int POLL_TIME = 3000;	// time between executions (in ms)
-	private static int NICE_SHIFT = 15;	// amount to renice processes with
-	
-	static void setShift(int newVal){
-		NICE_SHIFT = newVal;
-	}
+	static int POLL_TIME = 3000;	// time between executions (in ms)
+	static int NICE_SHIFT = 15;	// amount to renice processes with
 	
 	private volatile boolean kill = false; // flag to stop service
 	private volatile int prev = -1; // PID of previously buffed process
@@ -59,7 +55,7 @@ public class PriorityChangeService extends Service {
 							if(data[i].name.equals(foregroundActivityPackageName)){
 								// reduce niceness to give more priority
 								executeCommand("renice -" + NICE_SHIFT + " " + data[i].pid);
-								Log.i("priority change", NICE_SHIFT + "priority given to " + data[i].name);
+								Log.i("priority change", NICE_SHIFT + " priority given to " + data[i].name);
 								prev = data[i].pid;
 							}
 						}
