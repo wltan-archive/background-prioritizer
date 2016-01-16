@@ -1,4 +1,4 @@
-package self.backgroundprioritizer;
+package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.app.Activity;
 import android.content.Intent;

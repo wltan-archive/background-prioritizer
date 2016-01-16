@@ -1,4 +1,4 @@
-package self.backgroundprioritizer;
+package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
