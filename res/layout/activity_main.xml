@@ -9,12 +9,29 @@
     tools:context="sg.edu.nushigh.arp.backgroundprioritizer.MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/onoff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/priopick"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp"
+        android:onClick="toggleService"
+        android:text="Activate Service" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="Activate Service"
-        android:onClick="toggleService" />
+        android:layout_toLeftOf="@+id/priopick"
+        android:text="Priority Change Intensity: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <NumberPicker
+        android:id="@+id/priopick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/onoff" />
 
 </RelativeLayout>

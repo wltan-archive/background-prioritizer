@@ -19,7 +19,11 @@ import android.util.Log;
 public class PriorityChangeService extends Service {
 
 	private static final int POLL_TIME = 3000;	// time between executions (in ms)
-	private static final int NICE_SHIFT = 15;	// amount to renice processes with
+	private static int NICE_SHIFT = 15;	// amount to renice processes with
+	
+	static void setShift(int newVal){
+		NICE_SHIFT = newVal;
+	}
 	
 	private volatile boolean kill = false; // flag to stop service
 	private volatile int prev = -1; // PID of previously buffed process
@@ -35,6 +39,7 @@ public class PriorityChangeService extends Service {
 		    	if(!kill){
 					ArrayList<String> out = executeCommand("top -n 1");
 					// Data about individual processes only starts after line 7
+					// TODO make this less 'gimmicky' i.e. hardcoded
 					if(out.size() > 7){
 						String foregroundActivityPackageName = getForegroundActivity();
 						ProcessUsageData[] data = new ProcessUsageData[out.size()-7];
@@ -49,12 +54,12 @@ public class PriorityChangeService extends Service {
 							if(data[i].pid == toDelete){
 								// change niceness back to normal
 								executeCommand("renice +" + NICE_SHIFT + " " + data[i].pid);
-								Log.i("priority change", "priority taken from " + data[i].name);
+								Log.i("priority change", NICE_SHIFT + " priority taken from " + data[i].name);
 							}
 							if(data[i].name.equals(foregroundActivityPackageName)){
 								// reduce niceness to give more priority
 								executeCommand("renice -" + NICE_SHIFT + " " + data[i].pid);
-								Log.i("priority change", "priority given to " + data[i].name);
+								Log.i("priority change", NICE_SHIFT + "priority given to " + data[i].name);
 								prev = data[i].pid;
 							}
 						}
