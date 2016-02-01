@@ -5,8 +5,12 @@
     tools:context="sg.edu.nushigh.arp.backgroundprioritizer.MainActivity" >
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        android:id="@+id/toolbar_top"
+        layout="@layout/toolbar_top" />
+
+    <include
+        android:id="@+id/toolbar_btm"
+        layout="@layout/toolbar_btm"/>
 
     <Button
         android:id="@+id/onoff"

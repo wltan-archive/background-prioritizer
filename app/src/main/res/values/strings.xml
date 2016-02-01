@@ -3,5 +3,6 @@
 
     <string name="app_name">Background Prioritizer</string>
     <string name="action_settings">More</string>
+    <string name="task_killer">Task Killer</string>
 
 </resources>

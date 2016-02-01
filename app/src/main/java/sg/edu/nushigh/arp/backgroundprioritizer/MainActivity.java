@@ -1,8 +1,12 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,7 +22,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-	private Toolbar toolbar;
+	private Toolbar toolbarTop, toolbarBtm;
 	static boolean on;
 	Button toggle;
 	NumberPicker priopick;
@@ -28,8 +32,20 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		toolbar = (Toolbar) findViewById(R.id.toolbar); //attaching the layout to the toolbar object
-		setSupportActionBar(toolbar);
+
+		toolbarTop = (Toolbar) findViewById(R.id.toolbar_top);
+		toolbarBtm = (Toolbar) findViewById(R.id.toolbar_btm);
+		setSupportActionBar(toolbarTop);
+		toolbarBtm.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+			@Override
+			public boolean onMenuItemClick(MenuItem item){
+				switch(item.getItemId()){
+					case R.id.action_settings:
+						break;
+				}
+				return true;
+			}
+		});
 
 		toggle = (Button) findViewById(R.id.onoff);
 		priopick = (NumberPicker) findViewById(R.id.priopick);
@@ -44,18 +60,21 @@ public class MainActivity extends AppCompatActivity {
 		on = (PriorityChangeService.instance != null);
 		toggle.setText(on?"Deactivate Service":"Activate Service");
 
-		//code to color status bar for >= lollipop
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			//code to color status bar for >= lollipop
 			Window window = getWindow();
 			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 			window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+
+			//code to color app manager header for >= lollipop
+			ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_launcher), ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+			this.setTaskDescription(taskDesc);
 		}
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+	public boolean onCreateOptionsMenu(Menu menu) { //inflate menu for top toolbar
+		getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 		return true;
 	}
 
