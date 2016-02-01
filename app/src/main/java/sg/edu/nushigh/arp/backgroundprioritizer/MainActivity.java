@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 		});
+		toolbarBtm.inflateMenu(R.menu.toolbar_menu_btm);
 
 		toggle = (Button) findViewById(R.id.onoff);
 		priopick = (NumberPicker) findViewById(R.id.priopick);
