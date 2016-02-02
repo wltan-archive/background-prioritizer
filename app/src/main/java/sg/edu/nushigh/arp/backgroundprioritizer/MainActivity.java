@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 	ViewPager pager;
 	ViewPagerAdapter adapter;
 	SlidingTabLayout tabs;
-	CharSequence titles[] = {"Tab 1", "Tab 2", "Tab 3", "Tab 3"};
+	CharSequence titles[] = {"Tab 1", "Tab 2", "Tab 3", "Tab 4"};
 	int numOfTabs = 4;
 	static boolean on;
 	Button toggle;
