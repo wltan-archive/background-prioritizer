@@ -8,9 +8,25 @@
         android:id="@+id/toolbar_top"
         layout="@layout/toolbar_top" />
 
+    <!--
     <include
         android:id="@+id/toolbar_btm"
         layout="@layout/toolbar_btm"/>
+    -->
+
+    <sg.edu.nushigh.arp.backgroundprioritizer.SlidingTabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"
+        android:background="@color/colorPrimary" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/onoff"

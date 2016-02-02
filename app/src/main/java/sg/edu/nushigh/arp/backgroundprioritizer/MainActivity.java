@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +24,11 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
 	private Toolbar toolbarTop, toolbarBtm;
+	ViewPager pager;
+	ViewPagerAdapter adapter;
+	SlidingTabLayout tabs;
+	CharSequence titles[] = {"Tab 1", "Tab 2", "Tab 3", "Tab 3"};
+	int numOfTabs = 4;
 	static boolean on;
 	Button toggle;
 	NumberPicker priopick;
@@ -33,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		//toolbar
 		toolbarTop = (Toolbar) findViewById(R.id.toolbar_top);
-		toolbarBtm = (Toolbar) findViewById(R.id.toolbar_btm);
+		//toolbarBtm = (Toolbar) findViewById(R.id.toolbar_btm);
 		setSupportActionBar(toolbarTop);
-		toolbarBtm.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+		/*
+		toolbarBtm.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 			@Override
-			public boolean onMenuItemClick(MenuItem item){
-				switch(item.getItemId()){
+			public boolean onMenuItemClick(MenuItem item) {
+				switch (item.getItemId()) {
 					case R.id.action_settings:
 						break;
 				}
@@ -47,6 +55,23 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 		toolbarBtm.inflateMenu(R.menu.toolbar_menu_btm);
+		*/
+
+		//sliding layout
+		adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numOfTabs);
+
+		pager = (ViewPager)findViewById(R.id.pager);
+		pager.setAdapter(adapter);
+
+		tabs = (SlidingTabLayout)findViewById(R.id.tabs);
+		tabs.setDistributeEvenly(true);
+		tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer(){
+			@Override
+			public int getIndicatorColor(int pos){
+				return getResources().getColor(R.color.tabsScrollColor);
+			}
+		});
+		tabs.setViewPager(pager);
 
 		toggle = (Button) findViewById(R.id.onoff);
 		priopick = (NumberPicker) findViewById(R.id.priopick);

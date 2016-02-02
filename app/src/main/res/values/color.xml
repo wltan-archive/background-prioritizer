@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Use the 500 colors for colorPrimary, 700 colors for colorPrimaryDark and 200 colors for tabsScrollColor -->
     <color name="colorPrimary">#673AB7</color>
     <color name="colorPrimaryDark">#512DA8</color>
+    <color name="tabsScrollColor">#B39DDB</color>
 </resources>
