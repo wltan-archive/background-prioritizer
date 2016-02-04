@@ -26,8 +26,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
                 return new Tab2();
             case 2:
                 return new Tab3();
-            case 3:
-                return new Tab4();
             default:
                 //nothing should happen
         }
