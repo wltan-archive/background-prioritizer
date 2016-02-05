@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 	ViewPager pager;
 	ViewPagerAdapter adapter;
 	SlidingTabLayout tabs;
-	CharSequence titles[] = {"Tab 1", "Tab 2", "Tab 3", "Tab 4"};
-	int numOfTabs = 4;
+	CharSequence titles[] = {"System Information", "Task Killer", "Process Prioritizer"};
+	int numOfTabs = 3;
 	static boolean on;
 	Button toggle;
 	NumberPicker priopick;
