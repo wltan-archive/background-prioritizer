@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 
 import java.lang.reflect.Field;
@@ -13,12 +14,10 @@ import java.lang.reflect.Field;
 public class SystemInfo {
     private final Context c;
 
-    private final String uptime;
     private final WifiInfo wifi;
 
     public SystemInfo(Context c){
         this.c = c;
-        uptime = Utilities.executeCommand("uptime").get(0);
         if(wifiConnected())
             wifi = ((WifiManager)c.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         else
@@ -49,13 +48,17 @@ public class SystemInfo {
 
     // System uptime
     public String uptime(){
-        return uptime.substring(9, 17);
-    }
-    public String idletime(){
-        return uptime.substring(30, 38);
-    }
-    public String sleeptime(){
-        return uptime.substring(52, 60);
+        long ms = SystemClock.uptimeMillis();
+        ms /= 1000;
+        long sec = ms%60;
+        ms /= 60;
+        long min = ms%60;
+        ms /= 60;
+        long hour = ms%24;
+        ms /= 24;
+        long days = ms;
+
+        return days + "d " + hour + "h " + min + "m " + sec + "s";
     }
 
     // IMEI/ESN, or whatever unique identifier for the device
@@ -86,11 +89,15 @@ public class SystemInfo {
         return mWifi.isConnected();
     }
     // You should check that wifi is connected with the above method before proceeding to use these methods
+    // Results if wifi is not connected are untested
     public String wifiSSID(){
         return wifi.getSSID();
     }
     public int wifiIP(){
         return wifi.getIpAddress();
+    }
+    public String wifiMac(){
+        return wifi.getMacAddress();
     }
     public String wifiSpeed(){
         return wifi.getLinkSpeed() + " " + WifiInfo.LINK_SPEED_UNITS;
