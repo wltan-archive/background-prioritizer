@@ -2,7 +2,6 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -10,18 +9,26 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 
 import java.lang.reflect.Field;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class SystemInfo {
     private final Context c;
 
+    private final ConnectivityManager connManager;
     private final WifiInfo wifi;
 
     public SystemInfo(Context c){
         this.c = c;
+        connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         if(wifiConnected())
             wifi = ((WifiManager)c.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         else
             wifi = null;
+
     }
 
     // Android version
@@ -84,9 +91,7 @@ public class SystemInfo {
         wifi.setWifiEnabled(!wifi.isWifiEnabled());
     }
     public boolean wifiConnected(){
-        ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return mWifi.isConnected();
+        return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
     // You should check that wifi is connected with the above method before proceeding to use these methods
     // Results if wifi is not connected are untested
@@ -102,6 +107,31 @@ public class SystemInfo {
     public String wifiSpeed(){
         return wifi.getLinkSpeed() + " " + WifiInfo.LINK_SPEED_UNITS;
     }
+    public boolean bluetoothOn(){
+        return connManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH).isConnected();
+    }
+    public boolean mobileOn(){
+        return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
+    }
+    public String mobileType(){
+        return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getSubtypeName();
+    }
+    public String mobileIp(){
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        return inetAddress.getHostAddress();
+                    }
+
+                }
+            }
+        } catch (SocketException e) {}
+        return null;
+    }
+
 
 
 
