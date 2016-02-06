@@ -4,56 +4,163 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/abc_action_bar_default_height_material">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/device"
-        android:layout_gravity="center"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        card_view:cardCornerRadius="2dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:id="@+id/device"
+            style="@style/CardViewStyle">
 
             <LinearLayout
-                style="@style/SystemInfoCardHeader">
+                style="@style/SystemInfoCard">
 
-                <TextView
-                    android:id="@+id/header_device"
-                    style="@style/SystemInfoHeaderText"
-                    android:text="Device"/>
+                <LinearLayout
+                    style="@style/SystemInfoCardHeader">
+
+                    <TextView
+                        android:id="@+id/header_device"
+                        style="@style/SystemInfoHeaderText"
+                        android:text="Device"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDividerHeader"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_android"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_android"/>
+
+                    <TextView
+                        android:id="@+id/description_android"
+                        style="@style/SystemInfoDescription"
+                        android:text="Android"/>
+
+                    <TextView
+                        android:id="@+id/value_android"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDivider"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_uptime"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_uptime"/>
+
+                    <TextView
+                        android:id="@+id/description_uptime"
+                        style="@style/SystemInfoDescription"
+                        android:text="Up-time"/>
+
+                    <TextView
+                        android:id="@+id/value_uptime"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDivider"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_imei"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_imei"/>
+
+                    <TextView
+                        android:id="@+id/description_imei"
+                        style="@style/SystemInfoDescription"
+                        android:text="IMEI/ ESN"/>
+
+                    <TextView
+                        android:id="@+id/value_imei"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDivider"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_model"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_devicemodel"/>
+
+                    <TextView
+                        android:id="@+id/description_model"
+                        style="@style/SystemInfoDescription"
+                        android:text="Model"/>
+
+                    <TextView
+                        android:id="@+id/value_model"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDivider"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_rooted"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_rootstatus"/>
+
+                    <TextView
+                        android:id="@+id/description_rooted"
+                        style="@style/SystemInfoDescription"
+                        android:text="Rooted"/>
+
+                    <TextView
+                        android:id="@+id/value_rooted"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                style="@style/SystemInfoDivider"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/network"
+            style="@style/CardViewStyle">
 
             <LinearLayout
-                style="@style/SystemInfoCardBody">
+                style="@style/SystemInfoCard">
 
-                <ImageView
-                    android:id="@+id/image_android"
-                    style="@style/SystemInfoImage"
-                    android:src="@drawable/ic_info_android"/>
+                <LinearLayout
+                    style="@style/SystemInfoCardHeader">
 
-                <TextView
-                    android:id="@+id/description_android"
-                    style="@style/SystemInfoDescription"
-                    android:text="Android"/>
-
-                <TextView
-                    android:id="@+id/value_android"
-                    style="@style/SystemInfoValue"/>
+                    <TextView
+                        android:id="@+id/header_network"
+                        style="@style/SystemInfoHeaderText"
+                        android:text="Network"/>
 
             </LinearLayout>
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -17,6 +17,23 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="CardViewStyle" parent="CardView">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="cardCornerRadius">2dp</item>
+    </style>
+
+    <style name="SystemInfoCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="SystemInfoCardHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
@@ -40,9 +57,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="SystemInfoDividerHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/systemInfoDividerColor</item>
+    </style>
+
     <style name="SystemInfoDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">65dp</item>
         <item name="android:background">@color/systemInfoDividerColor</item>
     </style>
 
