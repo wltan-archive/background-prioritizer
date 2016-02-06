@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 	ViewPager pager;
 	ViewPagerAdapter adapter;
 	SlidingTabLayout tabs;
-	CharSequence titles[] = {"System Information", "Task Killer", "Process Prioritizer"};
+	CharSequence titles[] = {"Process Prioritizer", "Task Killer", "System Information"};
 	int numOfTabs = 3;
 
 	@Override
