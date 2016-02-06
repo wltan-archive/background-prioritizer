@@ -34,6 +34,25 @@ public final class Utilities {
     }
 
     /**
+     * Uses the {@code top} command to retrieve a list of running processes and their associated data
+     * @return The list of currently running processes
+     */
+    static ProcessUsageData[] taskList(){
+        ArrayList<String> out = Utilities.executeCommand("top -n 1");
+        // Data about individual processes only starts after line 7
+        // TODO make this less 'gimmicky' i.e. hardcoded
+        if(out.size() > 7){
+            ProcessUsageData[] data = new ProcessUsageData[out.size()-7];
+            for(int i = 0; i < out.size()-7; i++)
+                data[i] = new Utilities.ProcessUsageData(out.get(i + 7));
+            return data;
+        }else{
+            Log.e("get task list", "out is " + out.size() + " lines long");
+            return new ProcessUsageData[0];
+        }
+    }
+
+    /**
      * Used as a data type to organize the output from the {@code top} command.
      */
     static class ProcessUsageData{
@@ -52,7 +71,7 @@ public final class Utilities {
          * Constructs an object from the command output.
          * @param line The line as it is produced from the command line.
          */
-        ProcessUsageData(String line){
+        private ProcessUsageData(String line){
             String[] tokens = line.trim().split("\\s+");
             pid = Integer.parseInt(tokens[0]);
             prio = Integer.parseInt(tokens[1]);
