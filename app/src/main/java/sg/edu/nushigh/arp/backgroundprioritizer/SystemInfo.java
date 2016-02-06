@@ -96,7 +96,7 @@ public class SystemInfo {
     // You should check that wifi is connected with the above method before proceeding to use these methods
     // Results if wifi is not connected are untested
     public String wifiSSID(){
-        return wifi.getSSID();
+        return wifi.getSSID().substring(1, wifi.getSSID().length() - 1);
     }
     public int wifiIP(){
         return wifi.getIpAddress();

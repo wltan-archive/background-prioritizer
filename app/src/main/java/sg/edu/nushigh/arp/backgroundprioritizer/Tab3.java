@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class Tab3 extends Fragment {
 
     View v;
-    TextView android, uptime, imei, model, rooted, wifi;
-    ImageView image_wifi;
+    TextView android, uptime, imei, model, rooted, wifi, ipAddress, ipAddressDesc, macAddress, networkSsid, networkSsidDesc, bluetooth;
+    ImageView image_wifi, image_bluetooth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -39,6 +39,14 @@ public class Tab3 extends Fragment {
         rooted.setText(""); //TODO
         wifi = (TextView) v.findViewById(R.id.value_wifi);
         image_wifi = (ImageView) v.findViewById(R.id.image_wifi);
+        ipAddress = (TextView) v.findViewById(R.id.value_ip_address);
+        ipAddressDesc = (TextView) v.findViewById(R.id.description_ip_address);
+        macAddress = (TextView) v.findViewById(R.id.value_mac_address);
+        macAddress.setText(si.wifiMac());
+        networkSsid = (TextView) v.findViewById(R.id.value_network_ssid);
+        networkSsidDesc = (TextView) v.findViewById(R.id.description_network_ssid);
+        bluetooth = (TextView) v.findViewById(R.id.value_bluetooth);
+        image_bluetooth = (ImageView) v.findViewById(R.id.image_bluetooth);
 
         final Activity a = this.getActivity();
 
@@ -51,6 +59,21 @@ public class Tab3 extends Fragment {
                         uptime.setText(si.uptime());
                         wifi.setText(si.wifiConnected() ? "On" : "Off");
                         image_wifi.setImageResource(si.wifiConnected() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
+                        if(si.wifiConnected()){
+                            ipAddress.setText("Test"); //TODO
+                            ipAddress.setVisibility(View.VISIBLE);
+                            ipAddressDesc.setVisibility(View.VISIBLE);
+                            networkSsid.setText(si.wifiSSID());
+                            networkSsid.setVisibility(View.VISIBLE);
+                            networkSsidDesc.setVisibility(View.VISIBLE);
+                        }else{
+                            ipAddress.setVisibility(View.GONE);
+                            ipAddressDesc.setVisibility(View.GONE);
+                            networkSsid.setVisibility(View.GONE);
+                            networkSsidDesc.setVisibility(View.GONE);
+                        }
+                        bluetooth.setText(si.bluetoothOn() ? "On" : "Off");
+                        image_bluetooth.setImageResource(si.bluetoothOn() ? R.drawable.ic_info_bluetooth : R.drawable.ic_info_bluetooth_off);
                     }
                 });
             }

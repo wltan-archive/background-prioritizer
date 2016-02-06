@@ -21,7 +21,8 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="cardCornerRadius">2dp</item>
@@ -87,6 +88,34 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">right</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/systemInfoValueColor</item>
+    </style>
+
+    <style name="SystemInfoCardSmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">65dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="SystemInfoCardBodySmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="SystemInfoDescriptionSmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textColor">@color/systemInfoValueColor</item>
+    </style>
+
+    <style name="SystemInfoValueSmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">right</item>
         <item name="android:textColor">@color/systemInfoValueColor</item>
     </style>
 
