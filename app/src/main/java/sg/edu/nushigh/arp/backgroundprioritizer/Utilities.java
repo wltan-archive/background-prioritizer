@@ -139,7 +139,7 @@ public final class Utilities {
      * @param cmd The command to execute.
      * @return The output by the terminal after executing the command, line by line, in chronological order.
      */
-    static ArrayList<String> executeCommand(String cmd){
+    static ArrayList<String> executeSuperCommand(String cmd){
         try{
             Process p = Runtime.getRuntime().exec("su");
             DataOutputStream pstdin = new DataOutputStream(p.getOutputStream());
@@ -157,9 +157,40 @@ public final class Utilities {
             pstdout.close();
             return out;
         }catch(IOException e){
-            Log.e("prioritizer service", "IO error: " + e.getMessage());
+            Log.e("shell execution", "IO error: " + e.getMessage());
         }catch(InterruptedException e) {
-            Log.e("prioritizer service", "Interrupt error: " + e.getMessage());
+            Log.e("shell execution", "Interrupt error: " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * Creates a new Android terminal process with normal permissions,
+     * and then executes a command on it.
+     * @param cmd The command to execute.
+     * @return The output by the terminal after executing the command, line by line, in chronological order.
+     */
+    static ArrayList<String> executeCommand(String cmd){
+        try{
+            Process p = Runtime.getRuntime().exec("sh");
+            DataOutputStream pstdin = new DataOutputStream(p.getOutputStream());
+            BufferedReader pstdout = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            pstdin.writeBytes(cmd + "\nexit\n");
+            pstdin.flush();
+            p.waitFor();
+            ArrayList<String> out = new ArrayList<>();
+            String line;
+            while ((line = pstdout.readLine()) != null){
+                out.add(line);
+            }
+            pstdin.close();
+            pstdout.close();
+            return out;
+        }catch(IOException e){
+            Log.e("shell execution", "IO error: " + e.getMessage());
+        }catch(InterruptedException e) {
+            Log.e("shell execution", "Interrupt error: " + e.getMessage());
         }
         return new ArrayList<>();
     }

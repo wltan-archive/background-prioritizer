@@ -27,7 +27,7 @@ public class KillerTask extends AsyncTask<Context, Void, Void> {
             if(d.getName().equals(foregroundActivityPackageName))
                 continue;
             // if none of the above, we kill the process
-            Utilities.executeCommand("kill " + d.getPid());
+            Utilities.executeSuperCommand("kill " + d.getPid());
         }
         return null;
     }

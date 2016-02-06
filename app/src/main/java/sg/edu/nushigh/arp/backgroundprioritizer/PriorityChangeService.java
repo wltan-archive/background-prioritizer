@@ -40,12 +40,12 @@ public class PriorityChangeService extends Service {
 						}
 						if(pid == toDelete){
 							// change niceness back to normal
-							Utilities.executeCommand("renice +" + NICE_SHIFT + " " + pid);
+							Utilities.executeSuperCommand("renice +" + NICE_SHIFT + " " + pid);
 							Log.i("priority change", NICE_SHIFT + " priority taken from " + name);
 						}
 						if(name.equals(foregroundActivityPackageName)){
 							// reduce niceness to give more priority
-							Utilities.executeCommand("renice -" + NICE_SHIFT + " " + pid);
+							Utilities.executeSuperCommand("renice -" + NICE_SHIFT + " " + pid);
 							Log.i("priority change", NICE_SHIFT + " priority given to " + name);
 							prev = pid;
 						}
