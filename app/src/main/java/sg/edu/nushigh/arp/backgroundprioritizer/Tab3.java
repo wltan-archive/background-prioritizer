@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 public class Tab3 extends Fragment {
 
     View v;
@@ -21,6 +25,18 @@ public class Tab3 extends Fragment {
 
         android = (TextView) v.findViewById(R.id.value_android);
         android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
+
+        Runnable update = new Runnable(){
+            @Override
+            public void run(){
+                // update stuff here
+                // remember that UI things have to be declared final before accessing here (for some reason)
+            }
+        };
+
+        ScheduledExecutorService s = new ScheduledThreadPoolExecutor(10);
+        s.scheduleAtFixedRate(update, 0, 1, TimeUnit.SECONDS);
+
 
         return v;
     }

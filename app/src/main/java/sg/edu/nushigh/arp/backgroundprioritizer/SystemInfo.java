@@ -42,7 +42,7 @@ public class SystemInfo {
         }
         return "Error retrieving version";
     }
-    
+
     public String androidVersionCode(){
         return Build.VERSION.RELEASE;
     }
@@ -72,14 +72,28 @@ public class SystemInfo {
     }
 
     // Wireless and networks
+    public boolean wifiOn(){
+        WifiManager wifi = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
+        return wifi.isWifiEnabled();
+    }
+    public void toggleWifi(){
+        WifiManager wifi = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
+        wifi.setWifiEnabled(!wifi.isWifiEnabled());
+    }
     public boolean wifiConnected(){
         ConnectivityManager connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
         return mWifi.isConnected();
     }
+    // You should check that wifi is connected with the above method before proceeding to use these methods
     public String wifiSSID(){
-        return "";
+        return wifi.getSSID();
+    }
+    public int wifiIP(){
+        return wifi.getIpAddress();
+    }
+    public String wifiSpeed(){
+        return wifi.getLinkSpeed() + " " + WifiInfo.LINK_SPEED_UNITS;
     }
 
 
