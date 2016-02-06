@@ -1,8 +1,6 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,16 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,10 +21,6 @@ public class MainActivity extends AppCompatActivity {
 	SlidingTabLayout tabs;
 	CharSequence titles[] = {"System Information", "Task Killer", "Process Prioritizer"};
 	int numOfTabs = 3;
-	static boolean on;
-	Button toggle;
-	NumberPicker priopick;
-	EditText polltime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,30 +53,17 @@ public class MainActivity extends AppCompatActivity {
 
 		tabs = (SlidingTabLayout)findViewById(R.id.tabs);
 		tabs.setDistributeEvenly(true);
-		tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer(){
+		tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
 			@Override
-			public int getIndicatorColor(int pos){
+			public int getIndicatorColor(int pos) {
 				return getResources().getColor(R.color.tabsScrollColor);
 			}
 		});
 		tabs.setViewPager(pager);
 
-		toggle = (Button) findViewById(R.id.onoff);
-		priopick = (NumberPicker) findViewById(R.id.priopick);
-		polltime = (EditText) findViewById(R.id.polltime);
-
-		priopick.setMaxValue(15);
-		priopick.setMinValue(1);
-		priopick.setValue(PriorityChangeService.NICE_SHIFT);
-
-		polltime.setText(""+PriorityChangeService.POLL_TIME);
-
-		on = (PriorityChangeService.instance != null);
-		toggle.setText(on?"Deactivate Service":"Activate Service");
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			//code to color status bar for >= lollipop
-			Window window = getWindow();
+					//code to color status bar for >= lollipop
+					Window window = getWindow();
 			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 			window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 
@@ -117,37 +92,6 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	private static final int MIN_POLLTIME = 1000;
-
-	public void toggleService(View view){
-		if(!on){
-			Toast.makeText(getApplicationContext(), "Starting service...", Toast.LENGTH_SHORT).show();
-
-			int pollt = Integer.parseInt(polltime.getText().toString());
-			if(pollt < MIN_POLLTIME){
-				pollt = MIN_POLLTIME;
-				Toast.makeText(getApplicationContext(), "Poll time must be at least " + MIN_POLLTIME + "ms", Toast.LENGTH_SHORT).show();
-				polltime.setText(""+pollt);
-			}
-
-			PriorityChangeService.NICE_SHIFT = priopick.getValue();
-			PriorityChangeService.POLL_TIME = pollt;
-			startService(new Intent(this, PriorityChangeService.class));
-			Log.i("priority change", "service started!");
-			toggle.setText("Deactivate Service");
-			priopick.setEnabled(false);
-			polltime.setEnabled(false);
-		}else{
-			Toast.makeText(getApplicationContext(), "Stopping service...", Toast.LENGTH_SHORT).show();
-			stopService(new Intent(this, PriorityChangeService.class));
-			Log.i("priority change", "service stopped!");
-			toggle.setText("Activate Service");
-			priopick.setEnabled(true);
-			polltime.setEnabled(true);
-		}
-		on = !on;
 	}
 
 }
