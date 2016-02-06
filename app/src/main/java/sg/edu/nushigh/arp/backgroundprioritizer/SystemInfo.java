@@ -14,9 +14,7 @@ public class SystemInfo {
     }
 
     // Android version
-    public String androidVersionName(){
-        return Build.VERSION.CODENAME;
-    }
+    public String androidVersionName(){ return Build.VERSION.CODENAME; }
     public String androidVersionCode(){
         return Build.VERSION.RELEASE;
     }

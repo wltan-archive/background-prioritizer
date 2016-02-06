@@ -6,10 +6,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class Tab3 extends Fragment {
+
+    SystemInfo si = new SystemInfo(getContext());
+    View v;
+    TextView android;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        return inflater.inflate(R.layout.tab_3, container, false);
+        v = inflater.inflate(R.layout.tab_3, container, false);
+
+        android = (TextView) v.findViewById(R.id.value_android);
+        android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
+
+        return v;
     }
 }
