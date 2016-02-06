@@ -21,57 +21,34 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp">
+                style="@style/SystemInfoCardHeader">
 
                 <TextView
                     android:id="@+id/header_device"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Device"
-                    android:textStyle="bold"/>
+                    style="@style/SystemInfoHeaderText"
+                    android:text="Device"/>
 
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                style="@style/SystemInfoDivider"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp">
+                style="@style/SystemInfoCardBody">
 
                 <ImageView
                     android:id="@+id/image_android"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="25dp"
+                    style="@style/SystemInfoImage"
                     android:src="@drawable/ic_info_android"/>
 
                 <TextView
                     android:id="@+id/description_android"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/image_android"
-                    android:text="Android"
-                    android:textSize="16sp"/>
+                    style="@style/SystemInfoDescription"
+                    android:text="Android"/>
 
                 <TextView
                     android:id="@+id/value_android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:paddingRight="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"/>
+                    style="@style/SystemInfoValue"/>
 
             </LinearLayout>
 
