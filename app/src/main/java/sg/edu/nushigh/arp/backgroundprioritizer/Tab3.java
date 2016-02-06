@@ -1,6 +1,9 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,20 +40,24 @@ public class Tab3 extends Fragment {
         wifi = (TextView) v.findViewById(R.id.value_wifi);
         image_wifi = (ImageView) v.findViewById(R.id.image_wifi);
 
+        final Activity a = this.getActivity();
+
         Runnable update = new Runnable(){
             @Override
             public void run(){
-                // update stuff here
-                // remember that UI things have to be declared final before accessing here (for some reason)
-                uptime.setText(si.uptime());
-                wifi.setText(si.wifiConnected() ? "On" : "Off");
-                image_wifi.setImageResource(si.wifiConnected() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        uptime.setText(si.uptime());
+                        wifi.setText(si.wifiConnected() ? "On" : "Off");
+                        image_wifi.setImageResource(si.wifiConnected() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
+                    }
+                });
             }
         };
 
         ScheduledExecutorService s = new ScheduledThreadPoolExecutor(10);
         s.scheduleAtFixedRate(update, 0, 1, TimeUnit.SECONDS);
-
 
         return v;
     }
