@@ -62,7 +62,7 @@
                     <TextView
                         android:id="@+id/description_uptime"
                         style="@style/SystemInfoDescription"
-                        android:text="Up-time"/>
+                        android:text="Uptime"/>
 
                     <TextView
                         android:id="@+id/value_uptime"
@@ -155,7 +155,28 @@
                         style="@style/SystemInfoHeaderText"
                         android:text="Network"/>
 
-            </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDividerHeader"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_wifi"
+                        style="@style/SystemInfoImage"/>
+
+                    <TextView
+                        android:id="@+id/description_wifi"
+                        style="@style/SystemInfoDescription"
+                        android:text="Wi-Fi"/>
+
+                    <TextView
+                        android:id="@+id/value_wifi"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
