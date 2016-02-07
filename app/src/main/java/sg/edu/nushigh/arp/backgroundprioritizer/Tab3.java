@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,27 +18,35 @@ import java.util.concurrent.TimeUnit;
 public class Tab3 extends Fragment {
 
     View v;
-    TextView android, uptime, imei, model, rooted, wifi, ipAddress, ipAddressDesc, macAddress, networkSsid, networkSsidDesc, bluetooth;
-    ImageView image_wifi, image_bluetooth;
+    TextView android, uptime, imei, model, rooted, wifi, ipAddress, ipAddressDesc, macAddress, networkSsid, networkSsidDesc,
+            bluetooth, bluetoothAddress, bluetoothAddressDesc, mobiledata, mobileNetworkType;
+    ImageView image_wifi, image_bluetooth, image_mobiledata;
+    LinearLayout container_bluetooth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         v = inflater.inflate(R.layout.tab_3, container, false);
 
-        android       = (TextView) v.findViewById(R.id.value_android);
-        uptime        = (TextView) v.findViewById(R.id.value_uptime);
-        imei          = (TextView) v.findViewById(R.id.value_imei);
-        model         = (TextView) v.findViewById(R.id.value_model);
-        rooted        = (TextView) v.findViewById(R.id.value_rooted);
-        wifi          = (TextView) v.findViewById(R.id.value_wifi);
-        image_wifi    = (ImageView) v.findViewById(R.id.image_wifi);
-        ipAddress     = (TextView) v.findViewById(R.id.value_ip_address);
-        ipAddressDesc = (TextView) v.findViewById(R.id.description_ip_address);
-        macAddress    = (TextView) v.findViewById(R.id.value_mac_address);
-        networkSsid   = (TextView) v.findViewById(R.id.value_network_ssid);
-        networkSsidDesc=(TextView) v.findViewById(R.id.description_network_ssid);
-        bluetooth     = (TextView) v.findViewById(R.id.value_bluetooth);
-        image_bluetooth=(ImageView) v.findViewById(R.id.image_bluetooth);
+        android             = (TextView) v.findViewById(R.id.value_android);
+        uptime              = (TextView) v.findViewById(R.id.value_uptime);
+        imei                = (TextView) v.findViewById(R.id.value_imei);
+        model               = (TextView) v.findViewById(R.id.value_model);
+        rooted              = (TextView) v.findViewById(R.id.value_rooted);
+        wifi                = (TextView) v.findViewById(R.id.value_wifi);
+        image_wifi          = (ImageView) v.findViewById(R.id.image_wifi);
+        ipAddress           = (TextView) v.findViewById(R.id.value_ip_address);
+        ipAddressDesc       = (TextView) v.findViewById(R.id.description_ip_address);
+        macAddress          = (TextView) v.findViewById(R.id.value_mac_address);
+        networkSsid         = (TextView) v.findViewById(R.id.value_network_ssid);
+        networkSsidDesc     = (TextView) v.findViewById(R.id.description_network_ssid);
+        bluetooth           = (TextView) v.findViewById(R.id.value_bluetooth);
+        image_bluetooth     = (ImageView) v.findViewById(R.id.image_bluetooth);
+        bluetoothAddress    = (TextView) v.findViewById(R.id.value_bluetooth_address);
+        bluetoothAddressDesc= (TextView) v.findViewById(R.id.description_bluetooth_address);
+        container_bluetooth = (LinearLayout) v.findViewById(R.id.container_bluetooth); //to remove extra padding since none of the bluetooth subfields remain when bluetooth is off
+        mobiledata          = (TextView) v.findViewById(R.id.value_mobiledata);
+        image_mobiledata    = (ImageView) v.findViewById(R.id.image_mobiledata);
+        mobileNetworkType   = (TextView) v.findViewById(R.id.value_network_type);
 
         final SystemInfo si = new SystemInfo(getContext());
 
@@ -73,6 +82,20 @@ public class Tab3 extends Fragment {
                         }
                         bluetooth.setText(si.bluetoothOn() ? "On" : "Off");
                         image_bluetooth.setImageResource(si.bluetoothOn() ? R.drawable.ic_info_bluetooth : R.drawable.ic_info_bluetooth_off);
+                        if(si.bluetoothOn()){
+                            bluetoothAddress.setText(si.bluetoothAddress());
+                            bluetoothAddress.setVisibility(View.VISIBLE);
+                            bluetoothAddressDesc.setVisibility(View.VISIBLE);
+                            container_bluetooth.setVisibility(View.VISIBLE);
+
+                        }else{
+                            bluetoothAddress.setVisibility(View.GONE);
+                            bluetoothAddressDesc.setVisibility(View.GONE);
+                            container_bluetooth.setVisibility(View.GONE);
+                        }
+                        mobiledata.setText(si.mobileOn() ? "On" : "Off");
+                        image_mobiledata.setImageResource(si.mobileOn() ? R.drawable.ic_info_mobiledata_enabled : R.drawable.ic_info_mobiledata_disabled);
+                        mobileNetworkType.setText(si.mobileType());
                     }
                 });
             }

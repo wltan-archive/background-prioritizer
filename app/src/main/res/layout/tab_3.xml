@@ -249,6 +249,98 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/container_bluetooth"
+                    style="@style/SystemInfoCardSmall">
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_bluetooth_address"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Bluetooth Address"/>
+
+                        <TextView
+                            android:id="@+id/value_bluetooth_address"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDivider"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_mobiledata"
+                        style="@style/SystemInfoImage"/>
+
+                    <TextView
+                        android:id="@+id/description_mobiledata"
+                        style="@style/SystemInfoDescription"
+                        android:text="Mobile Data"/>
+
+                    <TextView
+                        android:id="@+id/value_mobiledata"
+                        style="@style/SystemInfoValue"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardSmall">
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_network_type"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Network Type"/>
+
+                        <TextView
+                            android:id="@+id/value_network_type"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewStyle">
+
+            <LinearLayout
+                style="@style/SystemInfoCard">
+
+                <LinearLayout
+                    style="@style/SystemInfoCardHeader">
+
+                    <TextView
+                        style="@style/SystemInfoHeaderText"
+                        android:text="RAM"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDividerHeader"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_ram"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_ram"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

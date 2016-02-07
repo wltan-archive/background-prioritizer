@@ -159,9 +159,12 @@ public final class SystemInfo {
     public boolean bluetoothOn(){
         return bluetooth.isEnabled();
     }
+    public String bluetoothAddress() { return bluetooth.getAddress(); }
+    // TODO always returns false
     public boolean mobileOn(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
     }
+    // TODO returns nothing
     public String mobileType(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getSubtypeName();
     }
