@@ -39,14 +39,13 @@ public class Tab3 extends Fragment {
         bluetooth     = (TextView) v.findViewById(R.id.value_bluetooth);
         image_bluetooth=(ImageView) v.findViewById(R.id.image_bluetooth);
 
-        SystemInfo si = new SystemInfo(getContext());
+        final SystemInfo si = new SystemInfo(getContext());
 
         android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
         model.setText(si.brand() + " " + si.model());
         imei.setText(si.imei());
         rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
-
 
         final Activity a = this.getActivity();
 
@@ -56,10 +55,9 @@ public class Tab3 extends Fragment {
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SystemInfo si = new SystemInfo(getContext());
                         uptime.setText(si.uptime());
-                        wifi.setText(si.wifiConnected() ? "Connected" : "Not connected");
-                        image_wifi.setImageResource(si.wifiConnected() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
+                        wifi.setText(si.wifiOn() ? "On" : "Off");
+                        image_wifi.setImageResource(si.wifiOn() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
                         if(si.wifiConnected()){
                             ipAddress.setText(si.wifiIP()); //TODO
                             ipAddress.setVisibility(View.VISIBLE);

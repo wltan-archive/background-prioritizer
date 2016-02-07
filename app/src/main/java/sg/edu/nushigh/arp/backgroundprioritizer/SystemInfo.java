@@ -40,7 +40,7 @@ public final class SystemInfo {
 
     private final Intent battery;
 
-    private final String[] cpuUse;
+    //private final String[] cpuUse;
 
     public SystemInfo(Context c){
         this.c = c;
@@ -52,7 +52,7 @@ public final class SystemInfo {
         intFs = new StatFs(Environment.getDataDirectory().getPath());
         extFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
         battery = c.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
+        //cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
     }
 
     // Android version
@@ -115,6 +115,7 @@ public final class SystemInfo {
     public boolean wifiConnected(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
+    // TODO app crashes if tab 3 is loaded with wifi on but not connected
     public String wifiMac(){
         boolean off = !wifiOn();
         String result;
@@ -128,6 +129,7 @@ public final class SystemInfo {
         return result;
     }
     // Check that wifi is connected with the above method before proceeding to use these methods
+    // TODO not a huge issue but post lollipop returns with ""?
     public String wifiSSID(){
         return wifiInfo.getSSID();
     }
@@ -265,6 +267,7 @@ public final class SystemInfo {
         return battery.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
     }
 
+    /*
     // CPU
     public int cpuUser(){
         // works as long as cpu doesn't reach 100% (pretty hard to do without freezing the update anyway)
@@ -277,5 +280,6 @@ public final class SystemInfo {
     public int cpuCount(){
         return runtime.availableProcessors();
     }
+    */
 
 }
