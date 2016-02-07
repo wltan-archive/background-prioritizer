@@ -1,11 +1,17 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -20,6 +26,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.Enumeration;
 
+@SuppressWarnings("deprecation")
 public final class SystemInfo {
     private final Context c;
 
@@ -28,12 +35,24 @@ public final class SystemInfo {
     private final WifiInfo wifiInfo;
     private final BluetoothAdapter bluetooth;
 
+    private final Runtime runtime;
+    private final StatFs intFs, extFs;
+
+    private final Intent battery;
+
+    private final String[] cpuUse;
+
     public SystemInfo(Context c){
         this.c = c;
         connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         wifi = ((WifiManager) c.getSystemService(Context.WIFI_SERVICE));
         wifiInfo = wifiConnected()?wifi.getConnectionInfo():null;
         bluetooth = BluetoothAdapter.getDefaultAdapter();
+        runtime = Runtime.getRuntime();
+        intFs = new StatFs(Environment.getDataDirectory().getPath());
+        extFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        battery = c.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
     }
 
     // Android version
@@ -158,6 +177,105 @@ public final class SystemInfo {
             }
         } catch (SocketException e) {}
         return null;
+    }
+
+    // Memory usage
+    public long ramTotal(){
+        return new ActivityManager.MemoryInfo().availMem;
+    } // TODO check that these numbers tally
+    public long ramUsed(){
+        return runtime.totalMemory();
+    }
+    public long ramFree(){
+        return runtime.freeMemory();
+    }
+
+    public int intStorageTotal(){
+        // deprecation suppressed because the non-deprecated alternative requires API level 18
+        return intFs.getBlockCount()*extFs.getBlockSize();
+    }
+    public int intStorageFree(){
+        return intFs.getAvailableBlocks()*extFs.getBlockSize();
+    }
+    public int extStorageTotal(){
+        return extFs.getBlockCount()*extFs.getBlockSize();
+    }
+    public int extStorageFree(){
+        return extFs.getAvailableBlocks()*extFs.getBlockSize();
+    }
+
+    // Battery
+    public int batteryLevel(){
+        int level = battery.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = battery.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        return (int) (100.0*level/scale);
+    }
+    public String batteryHealth(){
+        switch(battery.getIntExtra(BatteryManager.EXTRA_HEALTH, -1)){
+            case BatteryManager.BATTERY_HEALTH_COLD:
+                return "Cold";
+            case BatteryManager.BATTERY_HEALTH_DEAD:
+                return "Dead";
+            case BatteryManager.BATTERY_HEALTH_GOOD:
+                return "Good";
+            case BatteryManager.BATTERY_HEALTH_OVERHEAT:
+                return "Overheating";
+            case BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE:
+                return "Overvolting";
+            case BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE:
+                return "Unspecified Failure";
+            case BatteryManager.BATTERY_HEALTH_UNKNOWN:
+            default:
+                return "Unknown";
+        }
+    }
+    public String batteryChargingState(){
+        switch(battery.getIntExtra(BatteryManager.EXTRA_STATUS, -1)) {
+            case BatteryManager.BATTERY_STATUS_CHARGING:
+                return "Charging";
+            case BatteryManager.BATTERY_STATUS_DISCHARGING:
+                return "Discharging";
+            case BatteryManager.BATTERY_STATUS_FULL:
+                return "Full";
+            case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
+                return "Not charging";
+            case BatteryManager.BATTERY_STATUS_UNKNOWN:
+            default:
+                return "Unknown";
+        }
+    }
+    public String batteryChargingSource(){
+        switch(battery.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)){
+            case 0:
+                return "On battery";
+            case BatteryManager.BATTERY_PLUGGED_AC:
+                return "AC";
+            case BatteryManager.BATTERY_PLUGGED_USB:
+                return "USB";
+            case BatteryManager.BATTERY_PLUGGED_WIRELESS:
+                return "Wireless";
+            default:
+                return "Unknown";
+        }
+    }
+    public String batteryTechnology(){
+        return battery.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+    }
+    public int batteryVoltage(){
+        return battery.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
+    }
+
+    // CPU
+    public int cpuUser(){
+        // works as long as cpu doesn't reach 100% (pretty hard to do without freezing the update anyway)
+        return Integer.parseInt(cpuUse[0].substring(cpuUse[0].length() - 3, cpuUse[0].length() - 1).trim());
+    }
+    public int cpuSystem(){
+        return Integer.parseInt(cpuUse[1].substring(cpuUse[0].length()-3, cpuUse[1].length()-1).trim());
+    }
+
+    public int cpuCount(){
+        return runtime.availableProcessors();
     }
 
 }
