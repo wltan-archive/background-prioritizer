@@ -1,5 +1,6 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
@@ -7,28 +8,32 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.Enumeration;
 
-public class SystemInfo {
+public final class SystemInfo {
     private final Context c;
 
     private final ConnectivityManager connManager;
-    private final WifiInfo wifi;
+    private final WifiManager wifi;
+    private final WifiInfo wifiInfo;
+    private final BluetoothAdapter bluetooth;
 
     public SystemInfo(Context c){
         this.c = c;
         connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(wifiConnected())
-            wifi = ((WifiManager)c.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        else
-            wifi = null;
-
+        wifi = ((WifiManager) c.getSystemService(Context.WIFI_SERVICE));
+        wifiInfo = wifiConnected()?wifi.getConnectionInfo():null;
+        bluetooth = BluetoothAdapter.getDefaultAdapter();
     }
 
     // Android version
@@ -83,32 +88,55 @@ public class SystemInfo {
 
     // Wireless and networks
     public boolean wifiOn(){
-        WifiManager wifi = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
         return wifi.isWifiEnabled();
     }
     public void toggleWifi(){
-        WifiManager wifi = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
         wifi.setWifiEnabled(!wifi.isWifiEnabled());
     }
     public boolean wifiConnected(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
-    // You should check that wifi is connected with the above method before proceeding to use these methods
-    // Results if wifi is not connected are untested
-    public String wifiSSID(){
-        return wifi.getSSID().substring(1, wifi.getSSID().length() - 1);
-    }
-    public int wifiIP(){
-        return wifi.getIpAddress();
-    }
     public String wifiMac(){
-        return wifi.getMacAddress();
+        boolean off = !wifiOn();
+        String result;
+        if(off){
+            wifi.setWifiEnabled(true);
+            result = wifi.getConnectionInfo().getMacAddress();
+            wifi.setWifiEnabled(false);
+        }else{
+            result = wifiInfo.getMacAddress();
+        }
+        return result;
+    }
+    // Check that wifi is connected with the above method before proceeding to use these methods
+    public String wifiSSID(){
+        return wifiInfo.getSSID();
+    }
+    public String wifiIP(){
+        int ipAddress = wifiInfo.getIpAddress();
+
+        // Convert little-endian to big-endian if needed
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
+            ipAddress = Integer.reverseBytes(ipAddress);
+
+        byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
+
+        try {
+            return InetAddress.getByAddress(ipByteArray).getHostAddress();
+        } catch (UnknownHostException ex) {
+            Log.e("wifi info (IP)", "Unable to get host address");
+            return null;
+        }
     }
     public String wifiSpeed(){
-        return wifi.getLinkSpeed() + " " + WifiInfo.LINK_SPEED_UNITS;
+        return wifiInfo.getLinkSpeed() + " " + WifiInfo.LINK_SPEED_UNITS;
     }
+    public boolean bluetoothSupported(){
+        return bluetooth != null;
+    }
+    // Check that bluetooth is supported first
     public boolean bluetoothOn(){
-        return connManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH).isConnected();
+        return bluetooth.isEnabled();
     }
     public boolean mobileOn(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
@@ -131,9 +159,5 @@ public class SystemInfo {
         } catch (SocketException e) {}
         return null;
     }
-
-
-
-
 
 }

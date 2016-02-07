@@ -2,8 +2,6 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,27 +24,29 @@ public class Tab3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         v = inflater.inflate(R.layout.tab_3, container, false);
 
-        final SystemInfo si = new SystemInfo(getContext());
-
-        android = (TextView) v.findViewById(R.id.value_android);
-        android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
-        uptime = (TextView) v.findViewById(R.id.value_uptime);
-        imei = (TextView) v.findViewById(R.id.value_imei);
-        imei.setText(si.imei());
-        model = (TextView) v.findViewById(R.id.value_model);
-        model.setText(si.brand() + " " + si.model());
-        rooted = (TextView) v.findViewById(R.id.value_rooted);
-        rooted.setText(""); //TODO
-        wifi = (TextView) v.findViewById(R.id.value_wifi);
-        image_wifi = (ImageView) v.findViewById(R.id.image_wifi);
-        ipAddress = (TextView) v.findViewById(R.id.value_ip_address);
+        android       = (TextView) v.findViewById(R.id.value_android);
+        uptime        = (TextView) v.findViewById(R.id.value_uptime);
+        imei          = (TextView) v.findViewById(R.id.value_imei);
+        model         = (TextView) v.findViewById(R.id.value_model);
+        rooted        = (TextView) v.findViewById(R.id.value_rooted);
+        wifi          = (TextView) v.findViewById(R.id.value_wifi);
+        image_wifi    = (ImageView) v.findViewById(R.id.image_wifi);
+        ipAddress     = (TextView) v.findViewById(R.id.value_ip_address);
         ipAddressDesc = (TextView) v.findViewById(R.id.description_ip_address);
-        macAddress = (TextView) v.findViewById(R.id.value_mac_address);
+        macAddress    = (TextView) v.findViewById(R.id.value_mac_address);
+        networkSsid   = (TextView) v.findViewById(R.id.value_network_ssid);
+        networkSsidDesc=(TextView) v.findViewById(R.id.description_network_ssid);
+        bluetooth     = (TextView) v.findViewById(R.id.value_bluetooth);
+        image_bluetooth=(ImageView) v.findViewById(R.id.image_bluetooth);
+
+        SystemInfo si = new SystemInfo(getContext());
+
+        android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
+        model.setText(si.brand() + " " + si.model());
+        imei.setText(si.imei());
+        rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
-        networkSsid = (TextView) v.findViewById(R.id.value_network_ssid);
-        networkSsidDesc = (TextView) v.findViewById(R.id.description_network_ssid);
-        bluetooth = (TextView) v.findViewById(R.id.value_bluetooth);
-        image_bluetooth = (ImageView) v.findViewById(R.id.image_bluetooth);
+
 
         final Activity a = this.getActivity();
 
@@ -56,11 +56,12 @@ public class Tab3 extends Fragment {
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        SystemInfo si = new SystemInfo(getContext());
                         uptime.setText(si.uptime());
-                        wifi.setText(si.wifiConnected() ? "On" : "Off");
+                        wifi.setText(si.wifiConnected() ? "Connected" : "Not connected");
                         image_wifi.setImageResource(si.wifiConnected() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);
                         if(si.wifiConnected()){
-                            ipAddress.setText("Test"); //TODO
+                            ipAddress.setText(si.wifiIP()); //TODO
                             ipAddress.setVisibility(View.VISIBLE);
                             ipAddressDesc.setVisibility(View.VISIBLE);
                             networkSsid.setText(si.wifiSSID());
