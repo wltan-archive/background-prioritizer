@@ -339,6 +339,240 @@
                         style="@style/SystemInfoImage"
                         android:src="@drawable/ic_info_ram"/>
 
+                    <ProgressBar
+                        android:id="@+id/bar_ram"
+                        style="@style/BiggerProgressBarHorizontal"
+                        android:progressDrawable="@drawable/progress_ram"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardSmall">
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_ram_used"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Used"/>
+
+                        <TextView
+                            android:id="@+id/value_ram_used"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_ram_free"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Free"/>
+
+                        <TextView
+                            android:id="@+id/value_ram_free"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewStyle">
+
+            <LinearLayout
+                style="@style/SystemInfoCard">
+
+                <LinearLayout
+                    style="@style/SystemInfoCardHeader">
+
+                    <TextView
+                        style="@style/SystemInfoHeaderText"
+                        android:text="Internal Storage"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDividerHeader"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_storage_internal"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_storage_internal"/>
+
+                    <ProgressBar
+                        android:id="@+id/bar_storage_internal"
+                        style="@style/BiggerProgressBarHorizontal"
+                        android:progressDrawable="@drawable/progress_storage_internal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardSmall">
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_storage_internal_used"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Used"/>
+
+                        <TextView
+                            android:id="@+id/value_storage_internal_used"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_storage_internal_free"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Free"/>
+
+                        <TextView
+                            android:id="@+id/value_storage_internal_free"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            style="@style/CardViewStyle">
+
+            <LinearLayout
+                style="@style/SystemInfoCard">
+
+                <LinearLayout
+                    style="@style/SystemInfoCardHeader">
+
+                    <TextView
+                        style="@style/SystemInfoHeaderText"
+                        android:text="Battery"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/SystemInfoDividerHeader"/>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardBody">
+
+                    <ImageView
+                        android:id="@+id/image_battery"
+                        style="@style/SystemInfoImage"
+                        android:src="@drawable/ic_info_battery"/>
+
+                    <ProgressBar
+                        android:id="@+id/bar_battery"
+                        style="@style/BiggerProgressBarHorizontal"
+                        android:progressDrawable="@drawable/progress_battery"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SystemInfoCardSmall">
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_level"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Level"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_level"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_health"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Health"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_health"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_state"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="State"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_state"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_source"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Source"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_source"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_technology"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Technology"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_technology"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/SystemInfoCardBodySmall">
+
+                        <TextView
+                            android:id="@+id/description_battery_voltage"
+                            style="@style/SystemInfoDescriptionSmall"
+                            android:text="Voltage"/>
+
+                        <TextView
+                            android:id="@+id/value_battery_voltage"
+                            style="@style/SystemInfoValueSmall"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

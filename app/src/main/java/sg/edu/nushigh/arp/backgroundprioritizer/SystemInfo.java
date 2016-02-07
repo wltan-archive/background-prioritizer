@@ -40,7 +40,7 @@ public final class SystemInfo {
 
     private final Intent battery;
 
-    private final String[] cpuUse;
+    //private final String[] cpuUse;
 
     public SystemInfo(Context c){
         this.c = c;
@@ -52,7 +52,7 @@ public final class SystemInfo {
         intFs = new StatFs(Environment.getDataDirectory().getPath());
         extFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
         battery = c.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
+        //cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
     }
 
     // Android version
@@ -191,6 +191,7 @@ public final class SystemInfo {
     }
 
     // Memory usage
+    // TODO always returns 0
     public long ramTotal(){
         return new ActivityManager.MemoryInfo().availMem;
     } // TODO check that these numbers tally
@@ -201,6 +202,7 @@ public final class SystemInfo {
         return runtime.freeMemory();
     }
 
+    // TODO intStorage stuff all return negative values (probably extStorage stuff too)
     public int intStorageTotal(){
         // deprecation suppressed because the non-deprecated alternative requires API level 18
         return intFs.getBlockCount()*extFs.getBlockSize();
@@ -276,7 +278,7 @@ public final class SystemInfo {
         return battery.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
     }
 
-
+    /*
     // CPU
     public int cpuUser(){
         // works as long as cpu doesn't reach 100% (pretty hard to do without freezing the update anyway)
@@ -289,6 +291,6 @@ public final class SystemInfo {
     public int cpuCount(){
         return runtime.availableProcessors();
     }
-
+    */
 
 }
