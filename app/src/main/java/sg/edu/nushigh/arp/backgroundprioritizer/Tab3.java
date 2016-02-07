@@ -48,7 +48,7 @@ public class Tab3 extends Fragment {
         image_mobiledata    = (ImageView) v.findViewById(R.id.image_mobiledata);
         mobileNetworkType   = (TextView) v.findViewById(R.id.value_network_type);
 
-        final SystemInfo si = new SystemInfo(getContext());
+        SystemInfo si = new SystemInfo(getContext());
 
         android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
         model.setText(si.brand() + " " + si.model());
@@ -64,6 +64,7 @@ public class Tab3 extends Fragment {
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        SystemInfo si = new SystemInfo(a.getApplicationContext());
                         uptime.setText(si.uptime());
                         wifi.setText(si.wifiOn() ? "On" : "Off");
                         image_wifi.setImageResource(si.wifiOn() ? R.drawable.ic_info_wifi : R.drawable.ic_info_wifi_off);

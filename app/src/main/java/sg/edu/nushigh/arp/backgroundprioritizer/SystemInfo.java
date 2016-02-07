@@ -40,19 +40,19 @@ public final class SystemInfo {
 
     private final Intent battery;
 
-    //private final String[] cpuUse;
+    private final String[] cpuUse;
 
     public SystemInfo(Context c){
         this.c = c;
         connManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         wifi = ((WifiManager) c.getSystemService(Context.WIFI_SERVICE));
-        wifiInfo = wifiConnected()?wifi.getConnectionInfo():null;
+        wifiInfo = wifi.getConnectionInfo();
         bluetooth = BluetoothAdapter.getDefaultAdapter();
         runtime = Runtime.getRuntime();
         intFs = new StatFs(Environment.getDataDirectory().getPath());
         extFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
         battery = c.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        //cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
+        cpuUse = Utilities.executeCommand("top -n 1 -m 1").get(3).split(", ");
     }
 
     // Android version
@@ -88,7 +88,6 @@ public final class SystemInfo {
         long hour = ms%24;
         ms /= 24;
         long days = ms;
-
         return days + "d " + hour + "h " + min + "m " + sec + "s";
     }
 
@@ -115,7 +114,6 @@ public final class SystemInfo {
     public boolean wifiConnected(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
-    // TODO app crashes if tab 3 is loaded with wifi on but not connected
     public String wifiMac(){
         boolean off = !wifiOn();
         String result;
@@ -129,9 +127,11 @@ public final class SystemInfo {
         return result;
     }
     // Check that wifi is connected with the above method before proceeding to use these methods
-    // TODO not a huge issue but post lollipop returns with ""?
     public String wifiSSID(){
-        return wifiInfo.getSSID();
+        String ssid = wifiInfo.getSSID();
+        if(ssid.startsWith("\"") && ssid.endsWith(("\"")))
+            return ssid.substring(1, ssid.length()-1);
+        return ssid;
     }
     public String wifiIP(){
         int ipAddress = wifiInfo.getIpAddress();
@@ -155,11 +155,17 @@ public final class SystemInfo {
     public boolean bluetoothSupported(){
         return bluetooth != null;
     }
-    // Check that bluetooth is supported first
+    // Check that bluetooth is supported first, will throw exception otherwise
     public boolean bluetoothOn(){
+        if(!bluetoothSupported())
+            throw new UnsupportedOperationException("Bluetooth not supported!");
         return bluetooth.isEnabled();
     }
-    public String bluetoothAddress() { return bluetooth.getAddress(); }
+    public String bluetoothAddress() {
+        if(!bluetoothSupported())
+            throw new UnsupportedOperationException("Bluetooth not supported!");
+        return bluetooth.getAddress();
+    }
     // TODO always returns false
     public boolean mobileOn(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
@@ -270,7 +276,7 @@ public final class SystemInfo {
         return battery.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
     }
 
-    /*
+
     // CPU
     public int cpuUser(){
         // works as long as cpu doesn't reach 100% (pretty hard to do without freezing the update anyway)
@@ -283,6 +289,6 @@ public final class SystemInfo {
     public int cpuCount(){
         return runtime.availableProcessors();
     }
-    */
+
 
 }
