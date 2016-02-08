@@ -1,54 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/abc_action_bar_default_height_material"
+    android:paddingBottom="50dp">
 
-    <Button
-        android:id="@+id/onoff"
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/view_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@color/processInactiveColor"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Inactive"
+                android:textSize="50sp"
+                android:textColor="#FFFFFF"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_options"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="horizontal"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/priopick"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="41dp"
-        android:text="Activate Service" />
+        android:layout_margin="16dp"
+        android:clickable="true"
+        app:layout_anchor="@id/view_status"
+        app:layout_anchorGravity="bottom|right|end"
+        app:backgroundTint="@color/processActiveColor"/>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/priopick"
-        android:text="Priority Change Intensity: "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <NumberPicker
-        android:id="@+id/priopick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/onoff" />
-
-    <EditText
-        android:id="@+id/polltime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/priopick"
-        android:layout_alignRight="@+id/priopick"
-        android:layout_below="@+id/priopick"
-        android:ems="10"
-        android:inputType="number" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/polltime"
-        android:layout_alignBottom="@+id/polltime"
-        android:layout_toLeftOf="@+id/polltime"
-        android:text="Prioritization Time Interval: "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -7,4 +7,6 @@
     <color name="systemInfoDividerColor">#EEEEEE</color>
     <color name="systemInfoValueColor">#757575</color>
     <color name="progressBarBackgroundColor">#E0E0E0</color>
+    <color name="processActiveColor">#81C784</color>
+    <color name="processInactiveColor">#E57373</color>
 </resources>
