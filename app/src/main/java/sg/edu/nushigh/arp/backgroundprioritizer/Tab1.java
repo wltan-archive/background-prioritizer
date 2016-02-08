@@ -6,26 +6,30 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Tab1 extends Fragment {
 
     View v, view_status;
-    TextView text_status;
+    TextView text_status, value_priopick;
     FloatingActionButton toggle;
-    NumberPicker priopick;
+    SeekBar priopick;
     EditText polltime;
+    CoordinatorLayout snackbarPos;
     static boolean on;
 
     @Override
@@ -35,32 +39,66 @@ public class Tab1 extends Fragment {
         view_status = (View) v.findViewById(R.id.view_status);
         text_status = (TextView) v.findViewById(R.id.text_status);
         toggle = (FloatingActionButton) v.findViewById(R.id.toggle);
-        toggle.setOnClickListener(new OnClickListener(){
-            @Override
-            public void onClick(View v){
-                toggleService(v);
-            }
-        });
-        /*
-        toggle = (Button) v.findViewById(R.id.onoff);
-        priopick = (NumberPicker) v.findViewById(R.id.priopick);
-        polltime = (EditText) v.findViewById(R.id.polltime);
+        priopick = (SeekBar) v.findViewById(R.id.slider_priopick);
+        value_priopick = (TextView) v.findViewById(R.id.text_priopick_value);
+        polltime = (EditText) v.findViewById(R.id.text_polltime_value);
+        snackbarPos = (CoordinatorLayout) v.findViewById(R.id.snackbar_position);
 
-        priopick.setMaxValue(15);
-        priopick.setMinValue(1);
-        priopick.setValue(PriorityChangeService.NICE_SHIFT);
-
-        toggle.setOnClickListener(new OnClickListener(){
+        toggle.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 toggleService(v);
             }
         });
 
-        polltime.setText("" + PriorityChangeService.POLL_TIME);
+        priopick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                value_priopick.setText(String.valueOf(progress + 1));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        polltime.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == polltime.getId())
+                    polltime.setCursorVisible(true);
+            }
+        });
+
+        polltime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    polltime.clearFocus();
+                    polltime.setCursorVisible(false);
+                }
+                return false;
+            }
+        });
+
+        priopick.setProgress(PriorityChangeService.NICE_SHIFT - 1);
+        value_priopick.setText(String.valueOf(priopick.getProgress() + 1));
+        polltime.setText(String.valueOf(PriorityChangeService.POLL_TIME));
+
         on = (PriorityChangeService.instance != null);
-        toggle.setText(on?"Deactivate Service":"Activate Service");
-        */
+        if(on){
+            view_status.setBackgroundColor(getResources().getColor(R.color.processActiveColor));
+            text_status.setText("Active");
+            toggle.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.processInactiveColor)));
+            toggle.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_white_36dp));
+        }
+
         return v;
     }
 
@@ -72,7 +110,7 @@ public class Tab1 extends Fragment {
         Color.colorToHSV(getResources().getColor(R.color.processActiveColor), to);     // to color2
 
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-        anim.setDuration(1000);                              // for 300 ms
+        anim.setDuration(500);                              // for 500 ms
 
         final float[] hsv  = new float[3];                  // transition color
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -98,7 +136,7 @@ public class Tab1 extends Fragment {
         Color.colorToHSV(getResources().getColor(R.color.processInactiveColor), to);     // to color2
 
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-        anim.setDuration(1000);                              // for 300 ms
+        anim.setDuration(500);                              // for 500 ms
 
         final float[] hsv  = new float[3];                  // transition color
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -120,37 +158,35 @@ public class Tab1 extends Fragment {
 
     public void toggleService(View view){
         if(!on){
-            Toast.makeText(getActivity().getApplicationContext(), "Starting service...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getApplicationContext(), "Starting service...", Toast.LENGTH_SHORT).show();
 
-            /*
-            int pollt = Integer.parseInt(polltime.getText().toString());
+            int pollt = polltime.getText().toString().matches("") ? 1 : Integer.parseInt(polltime.getText().toString());
             if(pollt < MIN_POLLTIME){
                 pollt = MIN_POLLTIME;
-                Toast.makeText(getActivity().getApplicationContext(), "Poll time must be at least " + MIN_POLLTIME + "ms", Toast.LENGTH_SHORT).show();
-                //polltime.setText(""+pollt);
+                Snackbar.make(snackbarPos, "Poll time must be at least " + MIN_POLLTIME + "ms", Snackbar.LENGTH_LONG).show();
+                polltime.setText(""+pollt);
             }
-            */
 
-            //PriorityChangeService.NICE_SHIFT = priopick.getValue();
-            //PriorityChangeService.POLL_TIME = pollt;
+            PriorityChangeService.NICE_SHIFT = priopick.getProgress() + 1;
+            PriorityChangeService.POLL_TIME = pollt;
             getActivity().startService(new Intent(getActivity(), PriorityChangeService.class));
             Log.i("priority change", "service started!");
             inactiveToActive(view_status);
             text_status.setText("Active");
             toggle.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.processInactiveColor)));
-            //toggle.setText("Deactivate Service");
-            //priopick.setEnabled(false);
-            //polltime.setEnabled(false);
+            toggle.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop_white_36dp));
+            priopick.setEnabled(false);
+            polltime.setEnabled(false);
         }else{
-            Toast.makeText(getActivity().getApplicationContext(), "Stopping service...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity().getApplicationContext(), "Stopping service...", Toast.LENGTH_SHORT).show();
             getActivity().stopService(new Intent(getActivity(), PriorityChangeService.class));
             Log.i("priority change", "service stopped!");
             activeToinactive(view_status);
             text_status.setText("Inactive");
             toggle.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.processActiveColor)));
-            //toggle.setText("Activate Service");
-            //priopick.setEnabled(true);
-            //polltime.setEnabled(true);
+            toggle.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_white_36dp));
+            priopick.setEnabled(true);
+            polltime.setEnabled(true);
         }
         on = !on;
     }

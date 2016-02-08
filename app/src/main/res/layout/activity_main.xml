@@ -8,12 +8,6 @@
         android:id="@+id/toolbar_top"
         layout="@layout/toolbar_top" />
 
-    <!--
-    <include
-        android:id="@+id/toolbar_btm"
-        layout="@layout/toolbar_btm"/>
-    -->
-
     <sg.edu.nushigh.arp.backgroundprioritizer.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
