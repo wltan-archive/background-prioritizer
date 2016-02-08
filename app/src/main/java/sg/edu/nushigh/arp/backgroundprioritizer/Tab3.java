@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -21,11 +24,12 @@ public class Tab3 extends Fragment {
     View v;
     TextView android, uptime, imei, model, rooted, wifi, ipAddress, ipAddressDesc, macAddress, networkSsid, networkSsidDesc,
             bluetooth, bluetoothAddress, bluetoothAddressDesc, mobiledata, mobileNetworkType, ramUsed, ramFree,
-            storageInternalUsed, storageInternalFree, batteryLevel, batteryHealth, batteryState, batterySource,
-            batteryTechnology, batteryVoltage;
+            storageInternalUsed, storageInternalFree, storageExternalUsed, storageExternalFree, batteryLevel, batteryHealth,
+            batteryState, batterySource, batteryTechnology, batteryVoltage;
     ImageView image_wifi, image_bluetooth, image_mobiledata;
     LinearLayout container_bluetooth;
-    ProgressBar bar_ram, bar_storage_internal, bar_battery;
+    ProgressBar bar_ram, bar_storage_internal, bar_storage_external, bar_battery;
+    CardView card_storageExternal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -57,6 +61,10 @@ public class Tab3 extends Fragment {
         bar_storage_internal= (ProgressBar) v.findViewById(R.id.bar_storage_internal);
         storageInternalUsed = (TextView) v.findViewById(R.id.value_storage_internal_used);
         storageInternalFree = (TextView) v.findViewById(R.id.value_storage_internal_free);
+        bar_storage_external= (ProgressBar) v.findViewById(R.id.bar_storage_external);
+        storageExternalUsed = (TextView) v.findViewById(R.id.value_storage_external_used);
+        storageExternalFree = (TextView) v.findViewById(R.id.value_storage_external_free);
+        card_storageExternal= (CardView) v.findViewById(R.id.card_storage_external);
         bar_battery         = (ProgressBar) v.findViewById(R.id.bar_battery);
         batteryLevel        = (TextView) v.findViewById(R.id.value_battery_level);
         batteryHealth       = (TextView) v.findViewById(R.id.value_battery_health);
@@ -72,9 +80,7 @@ public class Tab3 extends Fragment {
         imei.setText(si.imei());
         rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
-        bar_ram.setMax(100);
-        bar_storage_internal.setMax(100);
-        bar_battery.setMax(100);
+        batteryTechnology.setText(si.batteryTechnology());
 
         final Activity a = this.getActivity();
 
@@ -123,13 +129,15 @@ public class Tab3 extends Fragment {
                         bar_storage_internal.setProgress((int) (100.0 * si.intStorageUsed() / si.intStorageTotal()));
                         storageInternalUsed.setText(String.valueOf(si.intStorageUsed()) + si.MEGABYTE_UNITS);
                         storageInternalFree.setText(String.valueOf(si.intStorageFree()) + si.MEGABYTE_UNITS);
+                        bar_storage_external.setProgress((int) (100.0 * si.extStorageUsed() / si.extStorageTotal()));
+                        storageExternalUsed.setText(String.valueOf(si.extStorageUsed()) + si.MEGABYTE_UNITS);
+                        storageExternalFree.setText(String.valueOf(si.extStorageFree()) + si.MEGABYTE_UNITS);
                         bar_battery.setProgress(si.batteryLevel());
                         batteryLevel.setText(si.batteryLevel() + "%");
                         batteryHealth.setText(si.batteryHealth());
                         batteryState.setText(si.batteryChargingState());
                         batterySource.setText(si.batteryChargingSource());
-                        batteryTechnology.setText(si.batteryTechnology());
-                        batteryVoltage.setText(si.batteryVoltage() + "mV");
+                        batteryVoltage.setText(si.batteryVoltage() + " mV");
                     }
                 });
             }
