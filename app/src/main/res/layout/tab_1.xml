@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:background="@color/processInactiveColor"
+            android:elevation="4dp"
             android:orientation="horizontal">
 
             <TextView
@@ -46,6 +47,7 @@
         android:clickable="true"
         app:layout_anchor="@id/view_status"
         app:layout_anchorGravity="bottom|right|end"
-        app:backgroundTint="@color/processActiveColor"/>
+        app:backgroundTint="@color/processActiveColor"
+        app:borderWidth="0dp"/>
 
 </android.support.design.widget.CoordinatorLayout>
