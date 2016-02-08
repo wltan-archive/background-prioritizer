@@ -36,6 +36,7 @@ public final class SystemInfo {
     private final BluetoothAdapter bluetooth;
 
     private final Runtime runtime;
+    private final ActivityManager.MemoryInfo mi;
     private final StatFs intFs, extFs;
 
     private final Intent battery;
@@ -49,6 +50,7 @@ public final class SystemInfo {
         wifiInfo = wifi.getConnectionInfo();
         bluetooth = BluetoothAdapter.getDefaultAdapter();
         runtime = Runtime.getRuntime();
+        mi = new ActivityManager.MemoryInfo(); ((ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(mi);
         intFs = new StatFs(Environment.getDataDirectory().getPath());
         extFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
         battery = c.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -166,15 +168,13 @@ public final class SystemInfo {
             throw new UnsupportedOperationException("Bluetooth not supported!");
         return bluetooth.getAddress();
     }
-    // TODO always returns false
     public boolean mobileOn(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
     }
-    // TODO returns nothing
     public String mobileType(){
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getSubtypeName();
     }
-    public String mobileIp(){
+    public String mobileIP(){
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
@@ -191,29 +191,29 @@ public final class SystemInfo {
     }
 
     // Memory usage
-    // TODO always returns 0
+    public static final long MEGABYTE = 1048576L;
     public long ramTotal(){
-        return new ActivityManager.MemoryInfo().availMem;
-    } // TODO check that these numbers tally
+        return mi.totalMem/MEGABYTE;
+    }
     public long ramUsed(){
-        return runtime.totalMemory();
+        return (mi.totalMem-mi.availMem)/MEGABYTE;
     }
     public long ramFree(){
-        return runtime.freeMemory();
+        return mi.availMem/MEGABYTE;
     }
 
     // TODO intStorage stuff all return negative values (probably extStorage stuff too)
-    public int intStorageTotal(){
+    public long intStorageTotal(){
         // deprecation suppressed because the non-deprecated alternative requires API level 18
-        return intFs.getBlockCount()*extFs.getBlockSize();
+        return ((long) intFs.getBlockCount())*intFs.getBlockSize();
     }
-    public int intStorageFree(){
-        return intFs.getAvailableBlocks()*extFs.getBlockSize();
+    public long intStorageFree(){
+        return ((long) intFs.getAvailableBlocks())*intFs.getBlockSize();
     }
-    public int extStorageTotal(){
+    public long extStorageTotal(){
         return extFs.getBlockCount()*extFs.getBlockSize();
     }
-    public int extStorageFree(){
+    public long extStorageFree(){
         return extFs.getAvailableBlocks()*extFs.getBlockSize();
     }
 
@@ -271,6 +271,9 @@ public final class SystemInfo {
                 return "Unknown";
         }
     }
+    public int batteryTemp(){
+        return battery.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
+    }
     public String batteryTechnology(){
         return battery.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
     }
@@ -287,10 +290,10 @@ public final class SystemInfo {
     public int cpuSystem(){
         return Integer.parseInt(cpuUse[1].substring(cpuUse[0].length()-3, cpuUse[1].length()-1).trim());
     }
+    */
 
     public int cpuCount(){
         return runtime.availableProcessors();
     }
-    */
 
 }

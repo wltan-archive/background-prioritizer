@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +72,7 @@ public class Tab3 extends Fragment {
         imei.setText(si.imei());
         rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
+        bar_ram.setMax(100);
 
         final Activity a = this.getActivity();
 
@@ -116,10 +115,10 @@ public class Tab3 extends Fragment {
                         mobiledata.setText(si.mobileOn() ? "On" : "Off");
                         image_mobiledata.setImageResource(si.mobileOn() ? R.drawable.ic_info_mobiledata_enabled : R.drawable.ic_info_mobiledata_disabled);
                         mobileNetworkType.setText(si.mobileType());
-                        bar_ram.setProgress(si.ramTotal() == 0 ? 500000 : (int) (si.ramUsed() / si.ramTotal() * 1000000));
-                        ramUsed.setText(String.valueOf(si.ramUsed()));
-                        ramFree.setText(String.valueOf(si.ramFree()));
-                        bar_storage_internal.setProgress((int) ((si.intStorageTotal() - si.intStorageFree()) / si.intStorageTotal() * 1000000));
+                        bar_ram.setProgress((int) (100.0 * si.ramUsed() / si.ramTotal()));
+                        ramUsed.setText(String.valueOf(si.ramUsed()) + " MB");
+                        ramFree.setText(String.valueOf(si.ramFree()) + " MB");
+                        bar_storage_internal.setProgress((int) ((si.intStorageTotal() - si.intStorageFree()) / si.intStorageTotal() * si.MEGABYTE));
                         storageInternalUsed.setText(String.valueOf(si.intStorageTotal() - si.intStorageFree()));
                         storageInternalFree.setText(String.valueOf(si.intStorageFree()));
                         bar_battery.setMax(100);
@@ -129,7 +128,7 @@ public class Tab3 extends Fragment {
                         batteryState.setText(si.batteryChargingState());
                         batterySource.setText(si.batteryChargingSource());
                         batteryTechnology.setText(si.batteryTechnology());
-                        batteryVoltage.setText(si.batteryVoltage() + "V");
+                        batteryVoltage.setText(si.batteryVoltage() + "mV");
                     }
                 });
             }
