@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -78,6 +79,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private final SlidingTabStrip mTabStrip;
 
+    private Toolbar tb = null;
+    private CharSequence titles[];
+
     public SlidingTabLayout(Context context) {
         this(context, null);
     }
@@ -98,6 +102,11 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         mTabStrip = new SlidingTabStrip(context);
         addView(mTabStrip, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    public void updateToolbarTitles(Toolbar tb, CharSequence titles[]){
+        this.tb = tb;
+        this.titles = titles;
     }
 
     /**
@@ -305,6 +314,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
+            if (tb != null) {
+                tb.setTitle(titles[position]);
+            }
+
         }
 
     }

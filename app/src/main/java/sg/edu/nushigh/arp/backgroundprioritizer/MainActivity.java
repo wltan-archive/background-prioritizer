@@ -15,12 +15,13 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
-	private Toolbar toolbarTop, toolbarBtm;
+	Toolbar toolbar;
 	ViewPager pager;
 	ViewPagerAdapter adapter;
 	SlidingTabLayout tabs;
 	CharSequence titles[] = {"Process Prioritizer", "Task Killer", "System Information"};
-	int numOfTabs = 3;
+	int numOfTabs = 3, imageResId[] = {R.drawable.ic_tab_process_prioritizer, R.drawable.ic_tab_task_killer,
+			R.drawable.ic_tab_system_info};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,28 +29,16 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		//toolbar
-		toolbarTop = (Toolbar) findViewById(R.id.toolbar_top);
-		//toolbarBtm = (Toolbar) findViewById(R.id.toolbar_btm);
-		setSupportActionBar(toolbarTop);
-		/*
-		toolbarBtm.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				switch (item.getItemId()) {
-					case R.id.action_settings:
-						break;
-				}
-				return true;
-			}
-		});
-		toolbarBtm.inflateMenu(R.menu.toolbar_menu_btm);
-		*/
+		toolbar = (Toolbar) findViewById(R.id.toolbar_top);
+		toolbar.setTitle(titles[0]);
+		setSupportActionBar(toolbar);
 
 		//sliding layout
-		adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numOfTabs);
+		adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, imageResId, numOfTabs, getApplicationContext());
 
 		pager = (ViewPager)findViewById(R.id.pager);
 		pager.setAdapter(adapter);
+		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 
 		tabs = (SlidingTabLayout)findViewById(R.id.tabs);
 		tabs.setDistributeEvenly(true);
@@ -59,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 				return getResources().getColor(R.color.tabsScrollColor);
 			}
 		});
+		tabs.setCustomTabView(R.layout.custom_tab, 0);
+		tabs.updateToolbarTitles(toolbar, titles);
 		tabs.setViewPager(pager);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -87,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_info) {
 			return true;
 		}
 
