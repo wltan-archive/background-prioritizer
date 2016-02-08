@@ -1,7 +1,9 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -62,6 +64,58 @@ public class Tab1 extends Fragment {
         return v;
     }
 
+    private void inactiveToActive(final View v){
+        final float[] from = new float[3],
+                to =   new float[3];
+
+        Color.colorToHSV(getResources().getColor(R.color.processInactiveColor), from);   // from color1
+        Color.colorToHSV(getResources().getColor(R.color.processActiveColor), to);     // to color2
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(1000);                              // for 300 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
+
+                v.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.start();
+    }
+
+    private void activeToinactive(final View v){
+        final float[] from = new float[3],
+                to =   new float[3];
+
+        Color.colorToHSV(getResources().getColor(R.color.processActiveColor), from);   // from color1
+        Color.colorToHSV(getResources().getColor(R.color.processInactiveColor), to);     // to color2
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(1000);                              // for 300 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
+
+                v.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.start();
+    }
+
     private static final int MIN_POLLTIME = 1000;
 
     public void toggleService(View view){
@@ -81,7 +135,7 @@ public class Tab1 extends Fragment {
             //PriorityChangeService.POLL_TIME = pollt;
             getActivity().startService(new Intent(getActivity(), PriorityChangeService.class));
             Log.i("priority change", "service started!");
-            view_status.setBackgroundColor(getResources().getColor(R.color.processActiveColor));
+            inactiveToActive(view_status);
             text_status.setText("Active");
             toggle.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.processInactiveColor)));
             //toggle.setText("Deactivate Service");
@@ -91,7 +145,7 @@ public class Tab1 extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), "Stopping service...", Toast.LENGTH_SHORT).show();
             getActivity().stopService(new Intent(getActivity(), PriorityChangeService.class));
             Log.i("priority change", "service stopped!");
-            view_status.setBackgroundColor(getResources().getColor(R.color.processInactiveColor));
+            activeToinactive(view_status);
             text_status.setText("Inactive");
             toggle.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.processActiveColor)));
             //toggle.setText("Activate Service");
