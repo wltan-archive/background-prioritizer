@@ -73,6 +73,8 @@ public class Tab3 extends Fragment {
         rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
         bar_ram.setMax(100);
+        bar_storage_internal.setMax(100);
+        bar_battery.setMax(100);
 
         final Activity a = this.getActivity();
 
@@ -116,12 +118,11 @@ public class Tab3 extends Fragment {
                         image_mobiledata.setImageResource(si.mobileOn() ? R.drawable.ic_info_mobiledata_enabled : R.drawable.ic_info_mobiledata_disabled);
                         mobileNetworkType.setText(si.mobileType());
                         bar_ram.setProgress((int) (100.0 * si.ramUsed() / si.ramTotal()));
-                        ramUsed.setText(String.valueOf(si.ramUsed()) + " MB");
-                        ramFree.setText(String.valueOf(si.ramFree()) + " MB");
-                        bar_storage_internal.setProgress((int) ((si.intStorageTotal() - si.intStorageFree()) / si.intStorageTotal() * si.MEGABYTE));
-                        storageInternalUsed.setText(String.valueOf(si.intStorageTotal() - si.intStorageFree()));
-                        storageInternalFree.setText(String.valueOf(si.intStorageFree()));
-                        bar_battery.setMax(100);
+                        ramUsed.setText(String.valueOf(si.ramUsed()) + si.MEGABYTE_UNITS);
+                        ramFree.setText(String.valueOf(si.ramFree()) + si.MEGABYTE_UNITS);
+                        bar_storage_internal.setProgress((int) (100.0 * si.intStorageUsed() / si.intStorageTotal()));
+                        storageInternalUsed.setText(String.valueOf(si.intStorageUsed()) + si.MEGABYTE_UNITS);
+                        storageInternalFree.setText(String.valueOf(si.intStorageFree()) + si.MEGABYTE_UNITS);
                         bar_battery.setProgress(si.batteryLevel());
                         batteryLevel.setText(si.batteryLevel() + "%");
                         batteryHealth.setText(si.batteryHealth());

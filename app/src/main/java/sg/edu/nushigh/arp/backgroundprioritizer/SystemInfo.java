@@ -192,6 +192,7 @@ public final class SystemInfo {
 
     // Memory usage
     public static final long MEGABYTE = 1048576L;
+    public static final String MEGABYTE_UNITS = " MB";
     public long ramTotal(){
         return mi.totalMem/MEGABYTE;
     }
@@ -201,20 +202,24 @@ public final class SystemInfo {
     public long ramFree(){
         return mi.availMem/MEGABYTE;
     }
-
-    // TODO intStorage stuff all return negative values (probably extStorage stuff too)
     public long intStorageTotal(){
         // deprecation suppressed because the non-deprecated alternative requires API level 18
-        return ((long) intFs.getBlockCount())*intFs.getBlockSize();
+        return ((long) intFs.getBlockCount())*intFs.getBlockSize()/MEGABYTE;
+    }
+    public long intStorageUsed(){
+        return intStorageTotal()-intStorageFree();
     }
     public long intStorageFree(){
-        return ((long) intFs.getAvailableBlocks())*intFs.getBlockSize();
+        return ((long) intFs.getAvailableBlocks())*intFs.getBlockSize()/MEGABYTE;
     }
     public long extStorageTotal(){
-        return extFs.getBlockCount()*extFs.getBlockSize();
+        return ((long) extFs.getBlockCount())*extFs.getBlockSize()/MEGABYTE;
+    }
+    public long extStorageUsed(){
+        return extStorageTotal()-extStorageFree();
     }
     public long extStorageFree(){
-        return extFs.getAvailableBlocks()*extFs.getBlockSize();
+        return ((long) extFs.getAvailableBlocks())*extFs.getBlockSize()/MEGABYTE;
     }
 
     // Battery
