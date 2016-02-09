@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 		adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, imageResId, numOfTabs, getApplicationContext());
 
 		pager = (ViewPager)findViewById(R.id.pager);
+		pager.setOffscreenPageLimit(2);
 		pager.setAdapter(adapter);
 		pager.setPageTransformer(true, new ZoomOutPageTransformer());
 
