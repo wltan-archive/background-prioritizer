@@ -291,6 +291,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/container_mobiledata"
                     style="@style/SystemInfoCardSmall">
 
                     <LinearLayout

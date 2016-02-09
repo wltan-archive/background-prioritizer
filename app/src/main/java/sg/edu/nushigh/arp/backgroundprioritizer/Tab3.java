@@ -27,7 +27,7 @@ public class Tab3 extends Fragment {
             storageInternalUsed, storageInternalFree, storageExternalUsed, storageExternalFree, batteryLevel, batteryHealth,
             batteryState, batterySource, batteryTechnology, batteryVoltage;
     ImageView image_wifi, image_bluetooth, image_mobiledata;
-    LinearLayout container_bluetooth;
+    LinearLayout container_bluetooth, container_mobiledata;
     ProgressBar bar_ram, bar_storage_internal, bar_storage_external, bar_battery;
     CardView card_storageExternal;
 
@@ -55,6 +55,7 @@ public class Tab3 extends Fragment {
         mobiledata          = (TextView) v.findViewById(R.id.value_mobiledata);
         image_mobiledata    = (ImageView) v.findViewById(R.id.image_mobiledata);
         mobileNetworkType   = (TextView) v.findViewById(R.id.value_network_type);
+        container_mobiledata= (LinearLayout) v.findViewById(R.id.container_mobiledata);
         bar_ram             = (ProgressBar) v.findViewById(R.id.bar_ram);
         ramUsed             = (TextView) v.findViewById(R.id.value_ram_used);
         ramFree             = (TextView) v.findViewById(R.id.value_ram_free);
@@ -111,18 +112,19 @@ public class Tab3 extends Fragment {
                         image_bluetooth.setImageResource(si.bluetoothOn() ? R.drawable.ic_info_bluetooth : R.drawable.ic_info_bluetooth_off);
                         if(si.bluetoothOn()){
                             bluetoothAddress.setText(si.bluetoothAddress());
-                            bluetoothAddress.setVisibility(View.VISIBLE);
-                            bluetoothAddressDesc.setVisibility(View.VISIBLE);
                             container_bluetooth.setVisibility(View.VISIBLE);
 
                         }else{
-                            bluetoothAddress.setVisibility(View.GONE);
-                            bluetoothAddressDesc.setVisibility(View.GONE);
                             container_bluetooth.setVisibility(View.GONE);
                         }
                         mobiledata.setText(si.mobileOn() ? "On" : "Off");
                         image_mobiledata.setImageResource(si.mobileOn() ? R.drawable.ic_info_mobiledata_enabled : R.drawable.ic_info_mobiledata_disabled);
-                        mobileNetworkType.setText(si.mobileType());
+                        if(si.mobileOn()){
+                            mobileNetworkType.setText(si.mobileType());
+                            container_mobiledata.setVisibility(View.VISIBLE);
+                        }else{
+                            container_mobiledata.setVisibility(View.GONE);
+                        }
                         bar_ram.setProgress((int) (100.0 * si.ramUsed() / si.ramTotal()));
                         ramUsed.setText(String.valueOf(si.ramUsed()) + si.MEGABYTE_UNITS);
                         ramFree.setText(String.valueOf(si.ramFree()) + si.MEGABYTE_UNITS);
