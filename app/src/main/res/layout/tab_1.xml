@@ -37,7 +37,8 @@
             android:layout_weight="0.4"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:paddingRight="15dp"
+            android:background="#FFFFFF">
 
             <TextView
                 android:id="@+id/text_priopick"
