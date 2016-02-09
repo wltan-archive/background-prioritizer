@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/abc_action_bar_default_height_material"
+    android:paddingBottom="50dp">
+<!--
+    <com.skyfishjy.library.RippleBackground
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ripple_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        app:rb_color="#0099CC"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="4"
+        app:rb_duration="3000"
+        app:rb_scale="6"/>
+
+    <com.skyfishjy.library.RippleBackground
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ripple_background_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        app:rb_color="#0099CC"
+        app:rb_radius="32dp"
+        app:rb_rippleAmount="1"
+        app:rb_duration="3000"
+        app:rb_scale="6"/>
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/kill_tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:backgroundTint="#0099CC"/>
+-->
+</RelativeLayout>
