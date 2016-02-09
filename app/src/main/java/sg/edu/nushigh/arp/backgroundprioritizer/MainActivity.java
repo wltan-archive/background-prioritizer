@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 public class MainActivity extends AppCompatActivity {
 
 	Toolbar toolbar;
@@ -79,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_info) {
+			new MaterialDialog.Builder(this)
+					.title("Information")
+					.content("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sapien urna, finibus vitae mi sit amet, sagittis mollis dolor. Integer pulvinar neque et hendrerit rutrum. Phasellus in purus odio. Sed non tincidunt augue. Cras et risus sed lacus blandit maximus.")
+					.show();
 			return true;
 		}
 
