@@ -38,13 +38,12 @@ public final class Utilities {
      * @return The list of currently running processes
      */
     static ProcessUsageData[] taskList(){
-        ArrayList<String> out = Utilities.executeCommand("top -n 1");
-        // Data about individual processes only starts after line 7
-        // TODO make this less 'gimmicky' i.e. hardcoded
-        if(out.size() > 7){
-            ProcessUsageData[] data = new ProcessUsageData[out.size()-7];
-            for(int i = 0; i < out.size()-7; i++)
-                data[i] = new Utilities.ProcessUsageData(out.get(i + 7));
+        ArrayList<String> out = Utilities.executeCommand("ps");
+        // Data about individual processes only starts after line 1
+        if(out.size() > 1){
+            ProcessUsageData[] data = new ProcessUsageData[out.size()-1];
+            for(int i = 1; i < out.size(); i++)
+                data[i-1] = new Utilities.ProcessUsageData(out.get(i));
             return data;
         }else{
             Log.e("get task list", "out is " + out.size() + " lines long");
@@ -57,13 +56,14 @@ public final class Utilities {
      */
     static class ProcessUsageData{
         private int pid;	// Process ID (PID)
-        private int prio;	// Priority
-        private int cpu;	// CPU usage (in %)
-        private char state;	// Running/Sleeping state
-        private int threads;// Number of threads
+        private int ppid;   // Parent PID
+        //        private int prio;	// Priority
+//        private int cpu;	// CPU usage (in %)
+//        private char state;	// Running/Sleeping state
+//        private int threads;// Number of threads
         private int vss;	// Virtual set size, units in K
         private int rss;	// Resident set size, units in K
-        private String pcy;	// Policy - foreground (fg) or background (bg)
+        //        private String pcy;	// Policy - foreground (fg) or background (bg)
         private String uid;	// User who owns it
         private String name;// Package Name
 
@@ -73,8 +73,13 @@ public final class Utilities {
          */
         private ProcessUsageData(String line){
             String[] tokens = line.trim().split("\\s+");
-            pid = Integer.parseInt(tokens[0]);
-            prio = Integer.parseInt(tokens[1]);
+            uid = tokens[0];
+            pid = Integer.parseInt(tokens[1]);
+            ppid = Integer.parseInt(tokens[2]);
+            vss = Integer.parseInt(tokens[3]);
+            rss = Integer.parseInt(tokens[4]);
+            name = tokens[8];
+            /*prio = Integer.parseInt(tokens[1]);
             cpu = Integer.parseInt(tokens[2].substring(0, tokens[2].length()-1));
             state = tokens[3].charAt(0);
             threads = Integer.parseInt(tokens[4]);
@@ -89,28 +94,28 @@ public final class Utilities {
                 pcy = "";
                 uid = tokens[7];
                 name = tokens[8];
-            }
+            }*/
         }
 
         public int getPid() {
             return pid;
         }
 
-        public int getPrio() {
-            return prio;
-        }
-
-        public int getCpu() {
-            return cpu;
-        }
-
-        public char getState() {
-            return state;
-        }
-
-        public int getThreads() {
-            return threads;
-        }
+//        public int getPrio() {
+//            return prio;
+//        }
+//
+//        public int getCpu() {
+//            return cpu;
+//        }
+//
+//        public char getState() {
+//            return state;
+//        }
+//
+//        public int getThreads() {
+//            return threads;
+//        }
 
         public int getVss() {
             return vss;
@@ -120,9 +125,9 @@ public final class Utilities {
             return rss;
         }
 
-        public String getPcy() {
-            return pcy;
-        }
+//        public String getPcy() {
+//            return pcy;
+//        }
 
         public String getUid() {
             return uid;
@@ -130,6 +135,10 @@ public final class Utilities {
 
         public String getName() {
             return name;
+        }
+
+        public int getPpid() {
+            return ppid;
         }
     }
 
