@@ -2,6 +2,7 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Tab1 extends Fragment {
 
@@ -79,7 +79,7 @@ public class Tab1 extends Fragment {
         polltime.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     polltime.clearFocus();
                     polltime.setCursorVisible(false);
                 }

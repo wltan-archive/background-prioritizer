@@ -96,7 +96,7 @@
                 android:textStyle="bold"
                 android:cursorVisible="false"
                 android:inputType="number"
-                android:maxLength="10"/>
+                android:maxLength="9"/>
 
         </RelativeLayout>
 
