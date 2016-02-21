@@ -114,7 +114,11 @@ public final class SystemInfo {
         wifi.setWifiEnabled(!wifi.isWifiEnabled());
     }
     public boolean wifiConnected(){
-        return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        try{
+            return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        }catch(Exception e){
+            return false;
+        }
     }
     public String wifiMac(){
         boolean off = !wifiOn();

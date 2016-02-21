@@ -56,14 +56,9 @@ public final class Utilities {
      */
     static class ProcessUsageData{
         private int pid;	// Process ID (PID)
-        private int ppid;   // Parent PID
-        //        private int prio;	// Priority
-//        private int cpu;	// CPU usage (in %)
-//        private char state;	// Running/Sleeping state
-//        private int threads;// Number of threads
+        private int ppid;   // Parent PID\
         private int vss;	// Virtual set size, units in K
         private int rss;	// Resident set size, units in K
-        //        private String pcy;	// Policy - foreground (fg) or background (bg)
         private String uid;	// User who owns it
         private String name;// Package Name
 
@@ -79,43 +74,11 @@ public final class Utilities {
             vss = Integer.parseInt(tokens[3]);
             rss = Integer.parseInt(tokens[4]);
             name = tokens[8];
-            /*prio = Integer.parseInt(tokens[1]);
-            cpu = Integer.parseInt(tokens[2].substring(0, tokens[2].length()-1));
-            state = tokens[3].charAt(0);
-            threads = Integer.parseInt(tokens[4]);
-            vss = Integer.parseInt(tokens[5].substring(0, tokens[5].length()-1));
-            rss = Integer.parseInt(tokens[6].substring(0, tokens[6].length()-1));
-            if(tokens.length == 10){
-                pcy = tokens[7];
-                uid = tokens[8];
-                name = tokens[9];
-            }else{
-                // pcy is blank, 9 tokens only
-                pcy = "";
-                uid = tokens[7];
-                name = tokens[8];
-            }*/
         }
 
         public int getPid() {
             return pid;
         }
-
-//        public int getPrio() {
-//            return prio;
-//        }
-//
-//        public int getCpu() {
-//            return cpu;
-//        }
-//
-//        public char getState() {
-//            return state;
-//        }
-//
-//        public int getThreads() {
-//            return threads;
-//        }
 
         public int getVss() {
             return vss;
@@ -124,10 +87,6 @@ public final class Utilities {
         public int getRss() {
             return rss;
         }
-
-//        public String getPcy() {
-//            return pcy;
-//        }
 
         public String getUid() {
             return uid;
