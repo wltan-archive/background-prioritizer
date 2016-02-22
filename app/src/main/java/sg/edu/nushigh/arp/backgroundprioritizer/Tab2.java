@@ -103,6 +103,13 @@ public class Tab2 extends Fragment {
                 // skip processes in exclusion list, includes system processes
                 if(exclusionList.contains(d.getName()))
                     continue;
+                // skip system processes for stability (as a temporary failsafe)
+                if(d.getUid().equals("system"))
+                    continue;
+                if(d.getUid().equals("root"))
+                    continue;
+                if(d.getUid().equals("shell"))
+                    continue;
                 // skip foreground process (always backgroundprioritizer for now in this implementation)
                 if(d.getName().equals(foregroundActivityPackageName))
                     continue;

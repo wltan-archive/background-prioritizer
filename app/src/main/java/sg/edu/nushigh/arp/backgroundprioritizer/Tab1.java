@@ -3,7 +3,6 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,9 +25,7 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -131,7 +128,6 @@ public class Tab1 extends Fragment {
 
         try {
             FileOutputStream fout = getContext().openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            Log.d("abc", "" + getContext().getFilesDir());
             OutputStreamWriter osw = new OutputStreamWriter(fout);
             BufferedWriter bw = new BufferedWriter(osw);
             bw.write(String.valueOf(priopick.getProgress()));
