@@ -2,6 +2,9 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +49,7 @@ public class Tab2 extends Fragment {
             processList.add(d.getName());
         }
 
-        processCount.setText(String.valueOf(data.length)); //TODO get actual number of processes
+        processCount.setText(String.valueOf(data.length));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, processList);
         list_process.setAdapter(adapter);
 
@@ -55,7 +58,7 @@ public class Tab2 extends Fragment {
         taskKiller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new KillerTask(c).execute();
+                new KillerTask().execute();
             }
         });
         return v;
@@ -63,14 +66,24 @@ public class Tab2 extends Fragment {
 
     public class KillerTask extends AsyncTask<Void, Void, ArrayList<Utilities.ProcessUsageData>> {
 
-        private final Context c;
         private final Set<String> exclusionList = new TreeSet<>();
 
-        KillerTask(Context c){
+        KillerTask(){
             super();
-            this.c = c;
-            // TODO add relevant UI-related fields here
-            // TODO get exclusion list from some persistent location
+            PackageManager pm = getContext().getPackageManager();
+
+            for(PackageInfo pi : pm.getInstalledPackages(0)) {
+                ApplicationInfo ai = null;
+                try {
+                    ai = pm.getApplicationInfo(pi.packageName, 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    // will never happen, we get names from pm itself
+                }
+
+                // exclude system apps
+                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0)
+                    exclusionList.add(pi.packageName);
+            }
         }
 
         int previousProcessCount;
@@ -85,16 +98,9 @@ public class Tab2 extends Fragment {
         protected ArrayList<Utilities.ProcessUsageData> doInBackground(Void... params) {
             ArrayList<Utilities.ProcessUsageData> killed = new ArrayList<>();
             Utilities.ProcessUsageData[] data = Utilities.taskList();
-            String foregroundActivityPackageName = Utilities.getForegroundActivity(c);
+            String foregroundActivityPackageName = Utilities.getForegroundActivity(getContext());
             for(Utilities.ProcessUsageData d: data){
-                // skip system processes for stability
-                if(d.getUid().equals("system"))
-                    continue;
-                if(d.getUid().equals("root"))
-                    continue;
-                if(d.getUid().equals("shell"))
-                    continue;
-                // skip processes in exclusion list
+                // skip processes in exclusion list, includes system processes
                 if(exclusionList.contains(d.getName()))
                     continue;
                 // skip foreground process (always backgroundprioritizer for now in this implementation)
