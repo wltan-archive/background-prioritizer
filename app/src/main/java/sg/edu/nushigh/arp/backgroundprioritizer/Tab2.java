@@ -2,6 +2,7 @@ package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,7 +19,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Tab2 extends Fragment {
 
@@ -27,12 +29,6 @@ public class Tab2 extends Fragment {
     FloatingActionButton taskKiller;
     ListView list_process;
     CoordinatorLayout snackbarPos;
-    /*
-    FloatingActionButton killTasks;
-    RippleBackground ripple, ripple2;
-    */
-
-//    int currProcessCount = 157, newProcessCount = 78;
     List<String> processList = new ArrayList<String>();
 
     @Override
@@ -59,69 +55,84 @@ public class Tab2 extends Fragment {
         taskKiller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskKiller.setClickable(false);
-                int previousProcessCount = Utilities.taskList().length;
-                try {
-                    new KillerTask(c).execute().get(2, TimeUnit.SECONDS);
-                }catch(Exception e){
-
-                }
-                Utilities.ProcessUsageData[] data = Utilities.taskList();
-                //TODO get actual number of processes
-                //TODO kill tasks
-                Snackbar.make(snackbarPos, previousProcessCount - data.length + " processes killed", Snackbar.LENGTH_LONG).show();
-                ValueAnimator animator = new ValueAnimator();
-                animator.setObjectValues(previousProcessCount, data.length); //TODO get actual number of processes
-                animator.setDuration(3000);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        processCount.setText("" + (int) animation.getAnimatedValue());
-                    }
-                });
-                animator.start();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        taskKiller.setClickable(true);
-                    }
-                }, 3000);
-                processList.clear();
-                for(Utilities.ProcessUsageData d: data){
-                    processList.add(d.getName());
-                }
+                new KillerTask(c).execute();
             }
         });
-        /*
-        killTasks = (FloatingActionButton) v.findViewById(R.id.kill_tasks);
-        ripple = (RippleBackground) v.findViewById(R.id.ripple_background);
-        ripple2 = (RippleBackground) v.findViewById(R.id.ripple_background_2);
-
-        ripple2.startRippleAnimation();
-
-        killTasks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ripple.isRippleAnimationRunning()) {
-                    ripple.stopRippleAnimation();
-                    ripple2.setVisibility(View.VISIBLE);
-                } else {
-                    ripple.startRippleAnimation();
-
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (ripple.isRippleAnimationRunning()) {
-                                ripple2.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    }, 2000);
-                }
-            }
-        });
-        */
-
         return v;
     }
+
+    public class KillerTask extends AsyncTask<Void, Void, ArrayList<Utilities.ProcessUsageData>> {
+
+        private final Context c;
+        private final Set<String> exclusionList = new TreeSet<>();
+
+        KillerTask(Context c){
+            super();
+            this.c = c;
+            // TODO add relevant UI-related fields here
+            // TODO get exclusion list from some persistent location
+        }
+
+        int previousProcessCount;
+
+        @Override
+        protected void onPreExecute(){
+            taskKiller.setClickable(false);
+            previousProcessCount = Utilities.taskList().length;
+        }
+
+        @Override
+        protected ArrayList<Utilities.ProcessUsageData> doInBackground(Void... params) {
+            ArrayList<Utilities.ProcessUsageData> killed = new ArrayList<>();
+            Utilities.ProcessUsageData[] data = Utilities.taskList();
+            String foregroundActivityPackageName = Utilities.getForegroundActivity(c);
+            for(Utilities.ProcessUsageData d: data){
+                // skip system processes for stability
+                if(d.getUid().equals("system"))
+                    continue;
+                if(d.getUid().equals("root"))
+                    continue;
+                if(d.getUid().equals("shell"))
+                    continue;
+                // skip processes in exclusion list
+                if(exclusionList.contains(d.getName()))
+                    continue;
+                // skip foreground process (always backgroundprioritizer for now in this implementation)
+                if(d.getName().equals(foregroundActivityPackageName))
+                    continue;
+                // if none of the above, we kill the process
+                Utilities.executeSuperCommand("kill " + d.getPid());
+                killed.add(d);
+            }
+            return killed;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Utilities.ProcessUsageData> result){
+            // result is list of killed tasks
+            Utilities.ProcessUsageData[] data = Utilities.taskList();
+            Snackbar.make(snackbarPos, previousProcessCount - data.length + " processes killed", Snackbar.LENGTH_LONG).show();
+            ValueAnimator animator = new ValueAnimator();
+            animator.setObjectValues(previousProcessCount, data.length);
+            animator.setDuration(3000);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    processCount.setText("" + (int) animation.getAnimatedValue());
+                }
+            });
+            animator.start();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    taskKiller.setClickable(true);
+                }
+            }, 3000);
+            processList.clear();
+            for(Utilities.ProcessUsageData d: data){
+                processList.add(d.getName());
+            }
+        }
+    }
+
 }
