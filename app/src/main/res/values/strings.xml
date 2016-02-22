@@ -3,6 +3,7 @@
 
     <string name="app_name">Background Prioritizer</string>
     <string name="action_settings">More</string>
-    <string name="task_killer">Task Killer</string>
+
+    <string name="credits">Made by:\nTan Wei Liang and Ian Yong Yew Chuang\nA project under NUS High School of Mathematics and Science</string>
 
 </resources>
