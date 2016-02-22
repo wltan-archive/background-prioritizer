@@ -1,6 +1,7 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Tab2 extends Fragment {
 
@@ -61,6 +65,24 @@ public class Tab2 extends Fragment {
                 new KillerTask().execute();
             }
         });
+
+        final Activity a = this.getActivity();
+
+        Runnable update = new Runnable(){
+            @Override
+            public void run(){
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processCount.setText(String.valueOf(Utilities.taskList().length));
+                    }
+                });
+            }
+        };
+
+        ScheduledExecutorService s = new ScheduledThreadPoolExecutor(10);
+        s.scheduleAtFixedRate(update, 0, 1, TimeUnit.SECONDS);
+
         return v;
     }
 
