@@ -1,6 +1,7 @@
 package sg.edu.nushigh.arp.backgroundprioritizer;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -22,6 +23,15 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 public class Tab1 extends Fragment {
 
     View v, view_status;
@@ -31,6 +41,7 @@ public class Tab1 extends Fragment {
     EditText polltime;
     CoordinatorLayout snackbarPos;
     static boolean on;
+    String FILENAME = "settings.txt";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -87,9 +98,21 @@ public class Tab1 extends Fragment {
             }
         });
 
-        priopick.setProgress(PriorityChangeService.NICE_SHIFT - 1);
-        value_priopick.setText(String.valueOf(priopick.getProgress() + 1));
-        polltime.setText(String.valueOf(PriorityChangeService.POLL_TIME));
+        try {
+            FileInputStream fin = getContext().openFileInput(FILENAME);
+            InputStreamReader isr = new InputStreamReader(fin);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            priopick.setProgress(Integer.valueOf(br.readLine()));
+            value_priopick.setText(String.valueOf(priopick.getProgress() + 1));
+            polltime.setText(br.readLine());
+            br.close();
+        }catch(Exception e){
+            e.printStackTrace();
+            priopick.setProgress(PriorityChangeService.NICE_SHIFT - 1);
+            value_priopick.setText(String.valueOf(priopick.getProgress() + 1));
+            polltime.setText(String.valueOf(PriorityChangeService.POLL_TIME));
+        }
 
         on = (PriorityChangeService.instance != null);
         if(on){
@@ -100,6 +123,24 @@ public class Tab1 extends Fragment {
         }
 
         return v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        try {
+            FileOutputStream fout = getContext().openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            Log.d("abc", "" + getContext().getFilesDir());
+            OutputStreamWriter osw = new OutputStreamWriter(fout);
+            BufferedWriter bw = new BufferedWriter(osw);
+            bw.write(String.valueOf(priopick.getProgress()));
+            bw.newLine();
+            bw.write(polltime.getText().toString());
+            bw.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void inactiveToActive(final View v){
