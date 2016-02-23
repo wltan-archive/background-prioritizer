@@ -81,6 +81,7 @@ public class Tab3 extends Fragment {
         imei.setText(si.imei());
         rooted.setText(""); //TODO
         macAddress.setText(si.wifiMac());
+        card_storageExternal.setVisibility(View.GONE);
         batteryTechnology.setText(si.batteryTechnology());
 
         final Activity a = this.getActivity();

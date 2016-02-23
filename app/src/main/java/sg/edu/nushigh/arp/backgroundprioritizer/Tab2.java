@@ -15,6 +15,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class Tab2 extends Fragment {
     ListView list_process;
     CoordinatorLayout snackbarPos;
     List<String> processList = new ArrayList<String>();
+    ArrayAdapter<String> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -48,10 +50,10 @@ public class Tab2 extends Fragment {
         list_process = (ListView) v.findViewById(R.id.list_process);
         snackbarPos = (CoordinatorLayout) v.findViewById(R.id.snackbar_position);
 
-        populateProcessList();
+        populateProcessList(processList);
 
         processCount.setText(String.valueOf(processList.size()));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, processList);
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, processList);
         list_process.setAdapter(adapter);
 
         final Context c = this.getContext();
@@ -71,7 +73,7 @@ public class Tab2 extends Fragment {
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        processCount.setText(String.valueOf(Utilities.taskList().length));
+                        new ProcessUpdate().execute();
                     }
                 });
             }
@@ -83,7 +85,28 @@ public class Tab2 extends Fragment {
         return v;
     }
 
-    private void populateProcessList(){
+    public class ProcessUpdate extends AsyncTask<Void, Void, Void>{
+        List<String> pList;
+        @Override
+        protected void onPreExecute() {
+            pList = new ArrayList<String>();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            populateProcessList(pList);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            processCount.setText(String.valueOf(pList.size()));
+            processList = pList;
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void populateProcessList(List<String> pList){
         for(Utilities.ProcessUsageData d: Utilities.taskList()){
             if(d.getUid().equals("system"))
                 continue;
@@ -94,7 +117,7 @@ public class Tab2 extends Fragment {
             if(d.getName().contains("/"))
                 continue;
             if(d.getName().contains("."))
-                processList.add(d.getName());
+                pList.add(d.getName());
         }
     }
 
@@ -161,11 +184,12 @@ public class Tab2 extends Fragment {
         protected void onPostExecute(ArrayList<Utilities.ProcessUsageData> result){
             // result is list of killed tasks
             processList.clear();
-            populateProcessList();
-            Snackbar.make(snackbarPos, previousProcessCount - processList.size() + " processes killed", Snackbar.LENGTH_LONG).show();
+            populateProcessList(processList);
+            list_process.invalidateViews();
+            Snackbar.make(snackbarPos, Math.max(previousProcessCount - processList.size(), 0) + " processes killed", Snackbar.LENGTH_LONG).show();
             ValueAnimator animator = new ValueAnimator();
             animator.setObjectValues(previousProcessCount, processList.size());
-            animator.setDuration(3000);
+            animator.setDuration(1000);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     processCount.setText("" + (int) animation.getAnimatedValue());
@@ -178,7 +202,7 @@ public class Tab2 extends Fragment {
                 public void run() {
                     taskKiller.setClickable(true);
                 }
-            }, 3000);
+            }, 1000);
         }
     }
 
