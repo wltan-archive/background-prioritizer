@@ -14,6 +14,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,6 +138,7 @@ public class Tab2 extends Fragment {
                     continue;
                 // if none of the above, we kill the process
                 Utilities.executeSuperCommand("kill " + d.getPid());
+                Log.i("Process killed", d.getName());
                 killed.add(d);
             }
             return killed;
