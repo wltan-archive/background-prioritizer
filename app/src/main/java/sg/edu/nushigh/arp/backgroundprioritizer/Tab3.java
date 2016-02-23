@@ -79,7 +79,7 @@ public class Tab3 extends Fragment {
         android.setText(si.androidVersionCode() + " (" + si.androidVersionName() + ")");
         model.setText(si.brand() + " " + si.model());
         imei.setText(si.imei());
-        rooted.setText(""); //TODO
+        rooted.setText(Utilities.executeSuperCommand("ls").size() == 0 ? "No" : "Yes");
         macAddress.setText(si.wifiMac());
         card_storageExternal.setVisibility(View.GONE);
         batteryTechnology.setText(si.batteryTechnology());
